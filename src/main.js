@@ -28,4 +28,4 @@ renderTemplate(contentList, editPoint(), RenderPosition.AFTERBEGIN);
 
 for (let i = 0; i < POINTS_COUNTER; i++) {
   renderTemplate(contentList, createPoint(), RenderPosition.BEFOREEND);
-};
+}
