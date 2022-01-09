@@ -1,7 +1,7 @@
 import RouteView from './view/route-total-view.js';
 import SiteMenuView from './view/menu-view.js';
 import SiteFilterView from './view/filter-view.js';
-import { renderElement, RenderPosition } from './render.js';
+import { render, RenderPosition } from './render.js';
 import SiteSortView from './view/sort-view.js';
 import ContentListView from './view/content-list.js';
 import NewPointView from './view/creation-form-view.js';
@@ -23,18 +23,18 @@ for (let i = 0; i < MOCK_COUNTER; i++) {
 }
 
 
-renderElement(tripMain, new RouteView(mockArray).element, RenderPosition.AFTERBEGIN);
+render(tripMain, new RouteView(mockArray).element, RenderPosition.AFTERBEGIN);
 
-renderElement(tripControlsNavigation, new SiteMenuView().element, RenderPosition.BEFOREEND);
+render(tripControlsNavigation, new SiteMenuView().element, RenderPosition.BEFOREEND);
 
-renderElement(tripControlsFilters, new SiteFilterView().element, RenderPosition.BEFOREEND);
-renderElement(mainContent, new SiteSortView().element, RenderPosition.BEFOREEND);
-renderElement(mainContent, new ContentListView().element, RenderPosition.BEFOREEND);
+render(tripControlsFilters, new SiteFilterView().element, RenderPosition.BEFOREEND);
+render(mainContent, new SiteSortView().element, RenderPosition.BEFOREEND);
+render(mainContent, new ContentListView().element, RenderPosition.BEFOREEND);
 
 
 const contentList = mainContent.querySelector('.trip-events__list');
 
-renderElement(contentList, new NewPointView().element, RenderPosition.AFTERBEGIN);
+render(contentList, new NewPointView().element, RenderPosition.AFTERBEGIN);
 
 
 const totalPrice = tripMain.querySelector('.trip-info__cost-value');
@@ -47,8 +47,8 @@ mockArray.forEach((point) => {
 
 
 totalPrice.textContent = offerTotal;
-renderElement(contentList, new EditFormView(mockArray[0]).element, RenderPosition.BEFOREEND);
+render(contentList, new EditFormView(mockArray[0]).element, RenderPosition.BEFOREEND);
 
 for (let i = 1; i < mockArray.length - 1; i++) {
-  renderElement(contentList, new PointView(mockArray[i]).element, RenderPosition.BEFOREEND);
+  render(contentList, new PointView(mockArray[i]).element, RenderPosition.BEFOREEND);
 }
