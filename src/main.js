@@ -18,6 +18,42 @@ const mainContent = main.querySelector('.trip-events');
 const MOCK_COUNTER = 30;
 const mockArray = [];
 
+const renderPoint = (listElement, point) => {
+  const pointComponent = new PointView(point);
+  const pointEditComponent = new EditFormView(point);
+
+  const replaceCardToForm = () => {
+    listElement.replaceChild(pointEditComponent.element, pointComponent.element);
+  };
+
+  const replaceFormToCard = () => {
+    listElement.replaceChild(pointComponent.element, pointEditComponent.element);
+  };
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      replaceFormToCard();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+
+
+  pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replaceCardToForm();
+    document.addEventListener('keydown', onEscKeyDown);
+  });
+
+  pointEditComponent.element.querySelector('form').addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    replaceFormToCard();
+    document.addEventListener('keydown', onEscKeyDown);
+  });
+
+
+  render(listElement, pointComponent.element, RenderPosition.BEFOREEND);
+};
+
 for (let i = 0; i < MOCK_COUNTER; i++) {
   mockArray.push(generatePoint());
 }
@@ -33,6 +69,8 @@ render(mainContent, new ContentListView().element, RenderPosition.BEFOREEND);
 
 
 const contentList = mainContent.querySelector('.trip-events__list');
+const pointsListComponent = new ContentListView();
+
 
 render(contentList, new NewPointView().element, RenderPosition.AFTERBEGIN);
 
@@ -47,8 +85,7 @@ mockArray.forEach((point) => {
 
 
 totalPrice.textContent = offerTotal;
-render(contentList, new EditFormView(mockArray[0]).element, RenderPosition.BEFOREEND);
 
-for (let i = 1; i < mockArray.length - 1; i++) {
-  render(contentList, new PointView(mockArray[i]).element, RenderPosition.BEFOREEND);
+for (let i = 0; i < mockArray.length - 1; i++) {
+  renderPoint(contentList, mockArray[i]);
 }
