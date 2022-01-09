@@ -1,4 +1,6 @@
-export const createPoint = (mockObject) => {
+import { createElement } from '../render.js';
+
+const createPoint = (mockObject) => {
   const {type, reachPoint, options, price} = mockObject;
   return `<li class="trip-events__item">
    <div class="event">
@@ -39,3 +41,27 @@ export const createPoint = (mockObject) => {
  </li>`;
 };
 
+export default class PointView {
+  #element = null;
+  #point = null;
+
+  constructor(point) {
+    this.#point = point;
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createPoint(this.#point);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}

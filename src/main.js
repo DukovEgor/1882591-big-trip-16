@@ -1,12 +1,12 @@
-import { createRoute } from './view/route-total-view.js';
-import { createSiteMenuTemplate } from './view/menu-view.js';
-import { createSiteFilterTemplate } from './view/filter-view.js';
-import { renderTemplate, RenderPosition } from './render.js';
-import { createSiteSortTemplate } from './view/sort-view.js';
-import { createContentlist } from './view/content-list.js';
-import { addNewPoint } from './view/creation-form-view.js';
-import { editPoint } from './view/edit-form-view.js';
-import { createPoint } from './view/point-in-list-view.js';
+import RouteView from './view/route-total-view.js';
+import SiteMenuView from './view/menu-view.js';
+import SiteFilterView from './view/filter-view.js';
+import { renderElement, RenderPosition } from './render.js';
+import SiteSortView from './view/sort-view.js';
+import ContentListView from './view/content-list.js';
+import NewPointView from './view/creation-form-view.js';
+import EditFormView from './view/edit-form-view.js';
+import PointView from './view/point-in-list-view.js';
 import { generatePoint } from './mock/point.js';
 
 const pageHeader = document.querySelector('.page-header');
@@ -23,16 +23,18 @@ for (let i = 0; i < MOCK_COUNTER; i++) {
 }
 
 
-renderTemplate(tripMain, createRoute(mockArray), RenderPosition.AFTERBEGIN);
-renderTemplate(tripControlsNavigation, createSiteMenuTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(tripControlsFilters, createSiteFilterTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(mainContent, createSiteSortTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(mainContent, createContentlist(), RenderPosition.BEFOREEND);
+renderElement(tripMain, new RouteView(mockArray).element, RenderPosition.AFTERBEGIN);
+
+renderElement(tripControlsNavigation, new SiteMenuView().element, RenderPosition.BEFOREEND);
+
+renderElement(tripControlsFilters, new SiteFilterView().element, RenderPosition.BEFOREEND);
+renderElement(mainContent, new SiteSortView().element, RenderPosition.BEFOREEND);
+renderElement(mainContent, new ContentListView().element, RenderPosition.BEFOREEND);
 
 
 const contentList = mainContent.querySelector('.trip-events__list');
 
-renderTemplate(contentList, addNewPoint(), RenderPosition.AFTERBEGIN);
+renderElement(contentList, new NewPointView().element, RenderPosition.AFTERBEGIN);
 
 
 const totalPrice = tripMain.querySelector('.trip-info__cost-value');
@@ -45,8 +47,8 @@ mockArray.forEach((point) => {
 
 
 totalPrice.textContent = offerTotal;
-renderTemplate(contentList, editPoint(mockArray[0]), RenderPosition.BEFOREEND);
+renderElement(contentList, new EditFormView(mockArray[0]).element, RenderPosition.BEFOREEND);
 
 for (let i = 1; i < mockArray.length - 1; i++) {
-  renderTemplate(contentList, createPoint(mockArray[i]), RenderPosition.BEFOREEND);
+  renderElement(contentList, new PointView(mockArray[i]).element, RenderPosition.BEFOREEND);
 }

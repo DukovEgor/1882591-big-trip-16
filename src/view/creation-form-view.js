@@ -1,4 +1,5 @@
-export const addNewPoint = () => (
+import { createElement } from '../render.js';
+const addNewPoint = () => (
   `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
@@ -162,3 +163,24 @@ export const addNewPoint = () => (
   </form>
 </li>`
 );
+
+
+export default class NewPointView {
+  #element = null;
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return addNewPoint();
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}
