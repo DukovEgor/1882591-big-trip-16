@@ -15,7 +15,7 @@ const tripControlsNavigation = pageHeader.querySelector('.trip-controls__navigat
 const tripControlsFilters = pageHeader.querySelector('.trip-controls__filters');
 const main = document.querySelector('main');
 const mainContent = main.querySelector('.trip-events');
-const MOCK_COUNTER = 2;
+const MOCK_COUNTER = 15;
 const mockArray = [];
 
 for (let i = 0; i < MOCK_COUNTER; i++) {

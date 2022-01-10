@@ -1,5 +1,5 @@
-export const editPoint = (mockObject) => {
-  const { type, reachPoint, description } = mockObject;
+export const editPoint = (obj) => {
+  const { type, reachPoint, description } = obj;
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
   <header class="event__header">

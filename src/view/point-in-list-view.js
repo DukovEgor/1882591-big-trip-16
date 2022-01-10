@@ -1,5 +1,5 @@
-export const createPoint = (mockObject) => {
-  const {type, reachPoint, options, price} = mockObject;
+export const createPoint = (obj) => {
+  const {type, reachPoint, options, price} = obj;
   return `<li class="trip-events__item">
    <div class="event">
      <time class="event__date" datetime="2019-03-18">MAR 18</time>
