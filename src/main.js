@@ -33,19 +33,6 @@ renderTemplate(mainContent, createContentlist(), RenderPosition.BEFOREEND);
 const contentList = mainContent.querySelector('.trip-events__list');
 
 renderTemplate(contentList, addNewPoint(), RenderPosition.AFTERBEGIN);
-
-const calcTotal = () => {
-  const totalPrice = tripMain.querySelector('.trip-info__cost-value');
-  const initialValue = 0;
-  const sum = mockArray.reduce(
-    (accumulator, currentValue) => accumulator + currentValue.price,
-    initialValue
-  );
-  totalPrice.textContent = sum;
-};
-calcTotal();
-
-
 renderTemplate(contentList, editPoint(mockArray[0]), RenderPosition.BEFOREEND);
 
 for (let i = 1; i < mockArray.length - 1; i++) {

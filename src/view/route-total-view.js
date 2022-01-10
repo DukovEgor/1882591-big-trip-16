@@ -1,3 +1,10 @@
+const calcTotal = (arr) => {
+  const initialValue = 0;
+  return arr.reduce(
+    (accumulator, currentValue) => accumulator + currentValue.price,
+    initialValue
+  );
+};
 export const createRoute = (arr) => (
   `<section class="trip-main__trip-info  trip-info">
 <div class="trip-info__main">
@@ -7,6 +14,6 @@ export const createRoute = (arr) => (
 </div>
 
 <p class="trip-info__cost">
-  Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
+  Total: &euro;&nbsp;<span class="trip-info__cost-value">${calcTotal(arr)}</span>
 </p>
 </section>`);
