@@ -60,10 +60,9 @@ export default class PointView {
     return createPoint(this.#point);
   }
 
-  get button() {
-    return this.#element.querySelector('.event__rollup-btn');
+  get rollupButton() {
+    return this.element.querySelector('.event__rollup-btn');
   }
-
 
   removeElement() {
     this.#element = null;

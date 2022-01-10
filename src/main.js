@@ -38,7 +38,7 @@ const renderPoint = (listElement, point) => {
     }
   };
 
-  pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+  pointComponent.rollupButton.addEventListener('click', () => {
     replaceCardToForm();
     document.addEventListener('keydown', onEscKeyDown);
   });
