@@ -15,7 +15,7 @@ const tripControlsNavigation = pageHeader.querySelector('.trip-controls__navigat
 const tripControlsFilters = pageHeader.querySelector('.trip-controls__filters');
 const main = document.querySelector('main');
 const mainContent = main.querySelector('.trip-events');
-const MOCK_COUNTER = 30;
+const MOCK_COUNTER = 2;
 const mockArray = [];
 
 for (let i = 0; i < MOCK_COUNTER; i++) {
@@ -34,18 +34,18 @@ const contentList = mainContent.querySelector('.trip-events__list');
 
 renderTemplate(contentList, addNewPoint(), RenderPosition.AFTERBEGIN);
 
+const calcTotal = () => {
+  const totalPrice = tripMain.querySelector('.trip-info__cost-value');
+  const initialValue = 0;
+  const sum = mockArray.reduce(
+    (accumulator, currentValue) => accumulator + currentValue.price,
+    initialValue
+  );
+  totalPrice.textContent = sum;
+};
+calcTotal();
 
-const totalPrice = tripMain.querySelector('.trip-info__cost-value');
 
-
-let offerTotal = 0;
-
-mockArray.forEach((point) => {
-  offerTotal += point.price;
-});
-
-
-totalPrice.textContent = offerTotal;
 renderTemplate(contentList, editPoint(mockArray[0]), RenderPosition.BEFOREEND);
 
 for (let i = 1; i < mockArray.length - 1; i++) {
