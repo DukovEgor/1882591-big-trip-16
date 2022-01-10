@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 import { createElement } from '../render.js';
 const editPoint = (mockObject) => {
   const { type, reachPoint, description } = mockObject;
+=======
+export const editPoint = (obj) => {
+  const { type, reachPoint, description } = obj;
+>>>>>>> ec99fcd25f00db7fa82b5073a12f714e78ee33dc
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
   <header class="event__header">

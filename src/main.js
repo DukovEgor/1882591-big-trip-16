@@ -15,7 +15,7 @@ const tripControlsNavigation = pageHeader.querySelector('.trip-controls__navigat
 const tripControlsFilters = pageHeader.querySelector('.trip-controls__filters');
 const main = document.querySelector('main');
 const mainContent = main.querySelector('.trip-events');
-const MOCK_COUNTER = 30;
+const MOCK_COUNTER = 15;
 const mockArray = [];
 
 const renderPoint = (listElement, point) => {
@@ -72,6 +72,7 @@ const contentList = mainContent.querySelector('.trip-events__list');
 const pointsListComponent = new ContentListView();
 
 
+<<<<<<< HEAD
 render(contentList, new NewPointView().element, RenderPosition.AFTERBEGIN);
 
 
@@ -85,6 +86,10 @@ mockArray.forEach((point) => {
 
 
 totalPrice.textContent = offerTotal;
+=======
+renderTemplate(contentList, addNewPoint(), RenderPosition.AFTERBEGIN);
+renderTemplate(contentList, editPoint(mockArray[0]), RenderPosition.BEFOREEND);
+>>>>>>> ec99fcd25f00db7fa82b5073a12f714e78ee33dc
 
 for (let i = 0; i < mockArray.length - 1; i++) {
   renderPoint(contentList, mockArray[i]);
