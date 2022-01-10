@@ -21,7 +21,7 @@ export const createPoint = (mockObject) => {
      <h4 class="visually-hidden">Offers:</h4>
      <ul class="event__selected-offers">
        <li class="event__offer">
-         <span class="event__offer-title">>${options.offers[1].title}</span>
+         <span class="event__offer-title">${options.offers[1].title}</span>
          +€&nbsp;
          <span class="event__offer-price">${options.offers[1].price}</span>
        </li>
