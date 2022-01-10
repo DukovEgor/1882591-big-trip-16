@@ -38,7 +38,6 @@ const renderPoint = (listElement, point) => {
     }
   };
 
-
   pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
     replaceCardToForm();
     document.addEventListener('keydown', onEscKeyDown);
@@ -58,22 +57,16 @@ for (let i = 0; i < MOCK_COUNTER; i++) {
   mockArray.push(generatePoint());
 }
 
-
 render(tripMain, new RouteView(mockArray).element, RenderPosition.AFTERBEGIN);
-
 render(tripControlsNavigation, new SiteMenuView().element, RenderPosition.BEFOREEND);
-
 render(tripControlsFilters, new SiteFilterView().element, RenderPosition.BEFOREEND);
 render(mainContent, new SiteSortView().element, RenderPosition.BEFOREEND);
 render(mainContent, new ContentListView().element, RenderPosition.BEFOREEND);
 
-
 const contentList = mainContent.querySelector('.trip-events__list');
 // const pointsListComponent = new ContentListView();
 
-
 render(contentList, new NewPointView().element, RenderPosition.AFTERBEGIN);
-render(contentList, new EditFormView(mockArray[0]).element, RenderPosition.BEFOREEND);
 
 for (let i = 0; i < mockArray.length - 1; i++) {
   renderPoint(contentList, mockArray[i]);
