@@ -37,6 +37,7 @@ renderTemplate(contentList, addNewPoint(), RenderPosition.AFTERBEGIN);
 
 const totalPrice = tripMain.querySelector('.trip-info__cost-value');
 
+
 let offerTotal = 0;
 
 mockArray.forEach((point) => {
