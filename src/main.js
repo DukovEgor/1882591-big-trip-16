@@ -69,27 +69,11 @@ render(mainContent, new ContentListView().element, RenderPosition.BEFOREEND);
 
 
 const contentList = mainContent.querySelector('.trip-events__list');
-const pointsListComponent = new ContentListView();
+// const pointsListComponent = new ContentListView();
 
 
-<<<<<<< HEAD
 render(contentList, new NewPointView().element, RenderPosition.AFTERBEGIN);
-
-
-const totalPrice = tripMain.querySelector('.trip-info__cost-value');
-
-let offerTotal = 0;
-
-mockArray.forEach((point) => {
-  offerTotal += point.price;
-});
-
-
-totalPrice.textContent = offerTotal;
-=======
-renderTemplate(contentList, addNewPoint(), RenderPosition.AFTERBEGIN);
-renderTemplate(contentList, editPoint(mockArray[0]), RenderPosition.BEFOREEND);
->>>>>>> ec99fcd25f00db7fa82b5073a12f714e78ee33dc
+render(contentList, new EditFormView(mockArray[0]).element, RenderPosition.BEFOREEND);
 
 for (let i = 0; i < mockArray.length - 1; i++) {
   renderPoint(contentList, mockArray[i]);

@@ -1,7 +1,5 @@
-<<<<<<< HEAD
 import { createElement } from '../render.js';
-const createRoute = (arr) => (
-=======
+
 const calcTotal = (arr) => {
   const initialValue = 0;
   return arr.reduce(
@@ -9,8 +7,7 @@ const calcTotal = (arr) => {
     initialValue
   );
 };
-export const createRoute = (arr) => (
->>>>>>> ec99fcd25f00db7fa82b5073a12f714e78ee33dc
+const createRoute = (arr) => (
   `<section class="trip-main__trip-info  trip-info">
 <div class="trip-info__main">
   <h1 class="trip-info__title">${arr[0].reachPoint} &mdash; ${arr.length > 3 ? '...' : arr[1].reachPoint} &mdash; ${arr[arr.length - 1].reachPoint}</h1>
@@ -28,8 +25,8 @@ export default class RouteView {
   #element = null;
   #cities = null;
 
-  constructor(citis) {
-    this.#cities = citis;
+  constructor(cities) {
+    this.#cities = cities;
   }
 
   get element() {

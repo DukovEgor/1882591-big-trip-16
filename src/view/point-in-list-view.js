@@ -1,12 +1,6 @@
-<<<<<<< HEAD
 import { createElement } from '../render.js';
-
-const createPoint = (mockObject) => {
-  const {type, reachPoint, options, price} = mockObject;
-=======
-export const createPoint = (obj) => {
+const createPoint = (obj) => {
   const {type, reachPoint, options, price} = obj;
->>>>>>> ec99fcd25f00db7fa82b5073a12f714e78ee33dc
   return `<li class="trip-events__item">
    <div class="event">
      <time class="event__date" datetime="2019-03-18">MAR 18</time>
