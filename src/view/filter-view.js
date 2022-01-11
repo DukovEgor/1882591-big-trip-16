@@ -1,6 +1,6 @@
 import { createElement } from '../render.js';
 const createSiteFilterTemplate = () => (
-  `<form class="trip-filters" action="#" method="get">
+  `<form class="trip-filters" action="#" method="get" name="filter">
   <div class="trip-filters__filter">
     <input id="filter-everything" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="everything" checked>
     <label class="trip-filters__filter-label" for="filter-everything">Everything</label>
@@ -34,6 +34,10 @@ export default class SiteFilterView {
 
   get template() {
     return createSiteFilterTemplate();
+  }
+
+  get form() {
+    return this.element.querySelector('.trip-filters');
   }
 
   removeElement() {

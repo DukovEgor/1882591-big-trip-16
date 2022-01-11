@@ -8,6 +8,7 @@ import NewPointView from './view/creation-form-view.js';
 import EditFormView from './view/edit-form-view.js';
 import PointView from './view/point-in-list-view.js';
 import { generatePoint } from './mock/point.js';
+import EmptyMessageView from './view/list-empty-view.js';
 
 const pageHeader = document.querySelector('.page-header');
 const tripMain = pageHeader.querySelector('.trip-main');
@@ -49,25 +50,44 @@ const renderPoint = (listElement, point) => {
     document.addEventListener('keydown', onEscKeyDown);
   });
 
-
   render(listElement, pointComponent.element, RenderPosition.BEFOREEND);
 };
+
 
 for (let i = 0; i < MOCK_COUNTER; i++) {
   mockArray.push(generatePoint());
 }
 
-render(tripMain, new RouteView(mockArray).element, RenderPosition.AFTERBEGIN);
+
+const filterFormComponent = new SiteFilterView();
 render(tripControlsNavigation, new SiteMenuView().element, RenderPosition.BEFOREEND);
-render(tripControlsFilters, new SiteFilterView().element, RenderPosition.BEFOREEND);
-render(mainContent, new SiteSortView().element, RenderPosition.BEFOREEND);
-render(mainContent, new ContentListView().element, RenderPosition.BEFOREEND);
+render(tripControlsFilters, filterFormComponent.element, RenderPosition.BEFOREEND);
 
-const contentList = mainContent.querySelector('.trip-events__list');
-// const pointsListComponent = new ContentListView();
 
-render(contentList, new NewPointView().element, RenderPosition.AFTERBEGIN);
+const filterFormHandler = () => {
+  const filterForm = tripControlsFilters.querySelector('.trip-filters');
+  filterForm.addEventListener('change', () => {//СМЕНИТЬ НА ГЕТТЕР КЛАССА НЕ ПОЛУЧАЕТСЯ ПО АНАЛОГИИ С КНОПКОЙ СТРЕЛКОЙ
+    if (!mockArray.length > 0) {//Выдает Form is null (ХОТЯ КНОПКА-СТРЕЛКА ПОЛУЧАЕТСЯ, КОД ТОЧНО ТАКОЙ ЖЕ)
+      mainContent.innerHTML = '';
+      render(mainContent, new EmptyMessageView().element, RenderPosition.BEFOREEND);
+    }
+  });
+};
+filterFormHandler();
 
-for (let i = 0; i < mockArray.length - 1; i++) {
-  renderPoint(contentList, mockArray[i]);
+
+if (mockArray.length > 0) {
+  render(tripMain, new RouteView(mockArray).element, RenderPosition.AFTERBEGIN);
+  render(mainContent, new SiteSortView().element, RenderPosition.BEFOREEND);
+  render(mainContent, new ContentListView().element, RenderPosition.BEFOREEND);
+  const contentList = mainContent.querySelector('.trip-events__list');
+  render(contentList, new NewPointView().element, RenderPosition.AFTERBEGIN);
+
+  for (let i = 0; i < mockArray.length - 1; i++) {
+    renderPoint(contentList, mockArray[i]);
+  }
+} else {
+  render(mainContent, new EmptyMessageView().element, RenderPosition.BEFOREEND);
 }
+
+export { tripControlsFilters };

@@ -17,6 +17,10 @@ export default class ContentListView {
     return createContentList();
   }
 
+  get ul() {
+    return this.element.querySelector('.trip-events__list');
+  }
+
   removeElement() {
     this.#element = null;
   }

@@ -7,10 +7,20 @@ const calcTotal = (arr) => {
     initialValue
   );
 };
+
+const howManyCities = (arr) => {
+  if (arr.length === 1) {
+    return `${arr[0].reachPoint}`;
+  } else if (arr.length === 2) {
+    return `${arr[0].reachPoint} &mdash; ${arr[1].reachPoint}`;
+  }
+  return `${arr[0].reachPoint} &mdash; ${arr.length > 3 ? '...' : arr[1].reachPoint} &mdash; ${arr[arr.length - 1].reachPoint}`;
+};
+
 const createRoute = (arr) => (
   `<section class="trip-main__trip-info  trip-info">
 <div class="trip-info__main">
-  <h1 class="trip-info__title">${arr[0].reachPoint} &mdash; ${arr.length > 3 ? '...' : arr[1].reachPoint} &mdash; ${arr[arr.length - 1].reachPoint}</h1>
+  <h1 class="trip-info__title">${howManyCities(arr)}</h1>
 
   <p class="trip-info__dates">Mar 18&nbsp;&mdash;&nbsp;20</p>
 </div>
@@ -33,7 +43,6 @@ export default class RouteView {
     if (!this.#element) {
       this.#element = createElement(this.template);
     }
-
     return this.#element;
   }
 
