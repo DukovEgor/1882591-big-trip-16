@@ -36,10 +36,6 @@ export default class SiteFilterView {
     return createSiteFilterTemplate();
   }
 
-  get form() {
-    return this.element.querySelector('.trip-filters');
-  }
-
   removeElement() {
     this.#element = null;
   }
