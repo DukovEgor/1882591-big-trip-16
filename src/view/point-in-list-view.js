@@ -1,4 +1,5 @@
-export const createPoint = (obj) => {
+import { createElement } from '../render.js';
+const createPoint = (obj) => {
   const {type, reachPoint, options, price} = obj;
   return `<li class="trip-events__item">
    <div class="event">
@@ -39,3 +40,31 @@ export const createPoint = (obj) => {
  </li>`;
 };
 
+export default class PointView {
+  #element = null;
+  #point = null;
+
+  constructor(point) {
+    this.#point = point;
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createPoint(this.#point);
+  }
+
+  get rollupButton() {
+    return this.element.querySelector('.event__rollup-btn');
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}

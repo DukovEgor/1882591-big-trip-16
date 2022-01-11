@@ -1,4 +1,5 @@
-export const editPoint = (obj) => {
+import { createElement } from '../render.js';
+const editPoint = (obj) => {
   const { type, reachPoint, description } = obj;
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -156,3 +157,28 @@ export const editPoint = (obj) => {
 </form>
 </li>`;
 };
+
+export default class EditFormView {
+  #element = null;
+  #point = null;
+
+  constructor(point) {
+    this.#point = point;
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return editPoint(this.#point);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}
