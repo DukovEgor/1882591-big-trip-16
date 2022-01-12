@@ -16,7 +16,7 @@ const tripControlsNavigation = pageHeader.querySelector('.trip-controls__navigat
 const tripControlsFilters = pageHeader.querySelector('.trip-controls__filters');
 const main = document.querySelector('main');
 const mainContent = main.querySelector('.trip-events');
-const MOCK_COUNTER = 0;
+const MOCK_COUNTER = 15;
 const mockArray = [];
 
 const renderPoint = (listElement, point) => {
@@ -39,7 +39,7 @@ const renderPoint = (listElement, point) => {
     }
   };
 
-  pointComponent.rollupButton.addEventListener('click', () => {
+  pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
     replaceCardToForm();
     document.addEventListener('keydown', onEscKeyDown);
   });
