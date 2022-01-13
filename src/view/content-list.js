@@ -1,6 +1,8 @@
 import { createElement } from '../render.js';
 
-const createContentList = () => ('<ul class="trip-events__list"></ul>');
+const createContentList = () => (
+  '<ul class="trip-events__list"></ul>'
+);
 
 export default class ContentListView {
   #element = null;
