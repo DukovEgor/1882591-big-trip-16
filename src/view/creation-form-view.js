@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from './absract-view.js';
 const addNewPoint = () => (
   `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -165,22 +165,10 @@ const addNewPoint = () => (
 );
 
 
-export default class NewPointView {
-  #element = null;
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
+export default class NewPointView extends AbstractView{
 
   get template() {
     return addNewPoint();
   }
 
-  removeElement() {
-    this.#element = null;
-  }
 }

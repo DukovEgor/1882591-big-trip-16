@@ -1,5 +1,6 @@
-import { createElement } from '../render.js';
+
 import { howManyCities } from '../utils/utils.js';
+import AbstractView from './absract-view.js';
 
 const calcTotal = (arr) => {
   const initialValue = 0;
@@ -24,26 +25,15 @@ const createRoute = (arr) => (
 </section>`);
 
 
-export default class RouteView {
-  #element = null;
+export default class RouteView extends AbstractView{
   #cities = null;
 
   constructor(cities) {
+    super();
     this.#cities = cities;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
   }
 
   get template() {
     return createRoute(this.#cities);
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

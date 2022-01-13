@@ -1,5 +1,6 @@
-import { createElement } from '../render.js';
+
 import { tripControlsFilters } from '../main.js';
+import AbstractView from './absract-view.js';
 
 const messageVocabulary = {
   past: 'There are no past events now',
@@ -12,22 +13,9 @@ const createEmptyMessage = () => {
   return `<p class="trip-events__msg">${messageVocabulary[filterFormCheckedInput.value]}</p>`;
 };
 
-export default class EmptyMessageView {
-  #element = null;
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
+export default class EmptyMessageView extends AbstractView{
 
   get template() {
     return createEmptyMessage();
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
