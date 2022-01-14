@@ -1,7 +1,7 @@
 import RouteView from './view/route-total-view.js';
 import SiteMenuView from './view/menu-view.js';
 import SiteFilterView from './view/filter-view.js';
-import { render, RenderPosition } from './render.js';
+import { render, RenderPosition, replace } from './utils/render.js';
 import SiteSortView from './view/sort-view.js';
 import ContentListView from './view/content-list.js';
 import NewPointView from './view/creation-form-view.js';
@@ -16,7 +16,7 @@ const tripControlsNavigation = pageHeader.querySelector('.trip-controls__navigat
 const tripControlsFilters = pageHeader.querySelector('.trip-controls__filters');
 const main = document.querySelector('main');
 const mainContent = main.querySelector('.trip-events');
-const MOCK_COUNTER = 15;
+const MOCK_COUNTER = 0;
 const mockArray = [];
 
 const renderPoint = (listElement, point) => {
@@ -24,11 +24,11 @@ const renderPoint = (listElement, point) => {
   const pointEditComponent = new EditFormView(point);
 
   const replaceCardToForm = () => {
-    listElement.replaceChild(pointEditComponent.element, pointComponent.element);
+    replace(pointEditComponent, pointComponent);
   };
 
   const replaceFormToCard = () => {
-    listElement.replaceChild(pointComponent.element, pointEditComponent.element);
+    replace(pointComponent, pointEditComponent);
   };
 
   const onEscKeyDown = (evt) => {
@@ -39,18 +39,17 @@ const renderPoint = (listElement, point) => {
     }
   };
 
-  pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+  pointComponent.setClickHandler(() => {
     replaceCardToForm();
     document.addEventListener('keydown', onEscKeyDown);
   });
 
-  pointEditComponent.element.querySelector('form').addEventListener('submit', (evt) => {
-    evt.preventDefault();
+  pointEditComponent.setFormSubmitHandler(() => {
     replaceFormToCard();
     document.addEventListener('keydown', onEscKeyDown);
   });
 
-  render(listElement, pointComponent.element, RenderPosition.BEFOREEND);
+  render(listElement, pointComponent, RenderPosition.BEFOREEND);
 };
 
 
@@ -61,15 +60,15 @@ for (let i = 0; i < MOCK_COUNTER; i++) {
 
 const filterFormComponent = new SiteFilterView();
 
-render(tripControlsNavigation, new SiteMenuView().element, RenderPosition.BEFOREEND);
-render(tripControlsFilters, filterFormComponent.element, RenderPosition.BEFOREEND);
+render(tripControlsNavigation, new SiteMenuView(), RenderPosition.BEFOREEND);
+render(tripControlsFilters, filterFormComponent, RenderPosition.BEFOREEND);
 
 
 const filterFormHandler = () => {
   filterFormComponent.element.addEventListener('change', () => {
     if (!mockArray.length > 0) {
       mainContent.innerHTML = '';
-      render(mainContent, new EmptyMessageView().element, RenderPosition.BEFOREEND);
+      render(mainContent, new EmptyMessageView, RenderPosition.BEFOREEND);
     }
   });
 };
@@ -77,18 +76,18 @@ filterFormHandler();
 
 const contentList = new ContentListView;
 if (mockArray.length > 0) {
-  render(tripMain, new RouteView(mockArray).element, RenderPosition.AFTERBEGIN);
-  render(mainContent, new SiteSortView().element, RenderPosition.BEFOREEND);
-  render(contentList.element, new NewPointView().element, RenderPosition.AFTERBEGIN);
+  render(tripMain, new RouteView(mockArray), RenderPosition.AFTERBEGIN);
+  render(mainContent, new SiteSortView(), RenderPosition.BEFOREEND);
+  render(contentList, new NewPointView(), RenderPosition.AFTERBEGIN);
 
   for (let i = 0; i < mockArray.length - 1; i++) {
-    renderPoint(contentList.element, mockArray[i]);
+    renderPoint(contentList, mockArray[i]);
   }
 
-  render(mainContent, contentList.element, RenderPosition.BEFOREEND);
+  render(mainContent, contentList, RenderPosition.BEFOREEND);
 
 } else {
-  render(mainContent, new EmptyMessageView().element, RenderPosition.BEFOREEND);
+  render(mainContent, new EmptyMessageView(), RenderPosition.BEFOREEND);
 }
 
 export { tripControlsFilters };

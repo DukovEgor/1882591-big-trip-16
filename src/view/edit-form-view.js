@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from './absract-view.js';
 const editPoint = (obj) => {
   const { type, reachPoint, description } = obj;
   return `<li class="trip-events__item">
@@ -158,27 +158,25 @@ const editPoint = (obj) => {
 </li>`;
 };
 
-export default class EditFormView {
-  #element = null;
+export default class EditFormView extends AbstractView{
   #point = null;
 
   constructor(point) {
+    super();
     this.#point = point;
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
+  setFormSubmitHandler = (callback) => {
+    this._callback.formSubmit = callback;
+    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
+  }
 
-    return this.#element;
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.formSubmit();
   }
 
   get template() {
     return editPoint(this.#point);
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

@@ -1,4 +1,5 @@
-import { createElement } from '../render.js';
+import AbstractView from './absract-view';
+
 const createPoint = (obj) => {
   const {type, reachPoint, options, price} = obj;
   return `<li class="trip-events__item">
@@ -40,27 +41,25 @@ const createPoint = (obj) => {
  </li>`;
 };
 
-export default class PointView {
-  #element = null;
+export default class PointView extends AbstractView{
   #point = null;
 
   constructor(point) {
+    super();
     this.#point = point;
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
+  setClickHandler = (callback) => {
+    this._callback.click = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
+  }
 
-    return this.#element;
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
   }
 
   get template() {
     return createPoint(this.#point);
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
