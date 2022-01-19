@@ -3,37 +3,51 @@ import EditFormView from '../view/edit-form-view';
 import PointView from '../view/point-in-list-view';
 
 export default class PointPresenter {
+  #listComponent = null;
+  #pointComponent = null;
+  #pointEditComponent = null;
 
-  renderPoint = (listComponent, point) => {
-    const pointComponent = new PointView(point);
-    const pointEditComponent = new EditFormView(point);
+  constructor(listComponent) {
+    this.#listComponent = listComponent;
+  }
 
-    const replaceCardToForm = () => {
-      replace(pointEditComponent, pointComponent);
-    };
+  init = (point) => {
+    this.#pointComponent = new PointView(point);
+    this.#pointEditComponent = new EditFormView(point);
 
-    const replaceFormToCard = () => {
-      replace(pointComponent, pointEditComponent);
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        replaceFormToCard();
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
-
-    pointComponent.setClickHandler(() => {
-      replaceCardToForm();
-      document.addEventListener('keydown', onEscKeyDown);
+    this.#pointComponent.setClickHandler(() => {
+      this.#replaceCardToForm();
+      document.addEventListener('keydown', this.#onEscKeyDown);
     });
 
-    pointEditComponent.setFormSubmitHandler(() => {
-      replaceFormToCard();
-      document.addEventListener('keydown', onEscKeyDown);
+    this.#pointEditComponent.setFormSubmitHandler(() => {
+      this.#replaceFormToCard();
+      document.addEventListener('keydown', this.#onEscKeyDown);
     });
 
-    render(listComponent, pointComponent, RenderPosition.BEFOREEND);
+    render(this.#listComponent, this.#pointComponent, RenderPosition.BEFOREEND);
+  }
+
+  #replaceCardToForm = () => {
+    replace(this.#pointEditComponent, this.#pointComponent);
+  }
+
+  #replaceFormToCard = () => {
+    replace(this.#pointComponent, this.#pointEditComponent);
+  };
+
+  #onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      this.#replaceFormToCard();
+      document.removeEventListener('keydown', this.#onEscKeyDown);
+    }
+  };
+
+  #setFavoriteHandler = (pointComponent) => {
+    const favoriteButton = pointComponent.element.querySelector('.event__favorite-btn');
+    favoriteButton.addEventListener('change', () => {
+
+    });
   }
 }

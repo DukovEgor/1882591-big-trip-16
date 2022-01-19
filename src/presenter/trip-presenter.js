@@ -76,10 +76,14 @@ export default class TripPresenter {
     render(this.#listComponent, this.#newPointComponent, RenderPosition.AFTERBEGIN);
   }
 
+  #renderPoint = (point) => {
+    const pointPresenter = new PointPresenter(this.#listComponent);
+    pointPresenter.init(point);
+  }
+
   #renderPoints = () => {
-    const pointPresenter = new PointPresenter;
     for (let i = 0; i < this.#points.length - 1; i++) {
-      pointPresenter.renderPoint(this.#listComponent, this.#points[i]);
+      this.#renderPoint(this.#points[i]);
     }
   }
 
