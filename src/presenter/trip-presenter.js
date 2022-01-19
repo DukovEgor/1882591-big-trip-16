@@ -1,4 +1,4 @@
-import { render, replace, RenderPosition } from '../utils/render.js';
+import { render, RenderPosition } from '../utils/render.js';
 import SiteFilterView from '../view/filter-view.js';
 import SiteMenuView from '../view/menu-view.js';
 import EmptyMessageView from '../view/list-empty-view.js';
@@ -6,8 +6,7 @@ import ContentListView from '../view/content-list.js';
 import RouteView from '../view/route-total-view';
 import SiteSortView from '../view/sort-view.js';
 import NewPointView from '../view/creation-form-view.js';
-import PointView from '../view/point-in-list-view.js';
-import EditFormView from '../view/edit-form-view';
+import PointPresenter from './point-pesenter.js';
 
 const pageHeader = document.querySelector('.page-header');
 const tripMain = pageHeader.querySelector('.trip-main');
@@ -22,7 +21,6 @@ export default class TripPresenter {
   #listComponent = new ContentListView;
   #sortComponent = new SiteSortView;
   #newPointComponent = new NewPointView;
-
   #points = [];
 
   constructor(points) {
@@ -78,42 +76,10 @@ export default class TripPresenter {
     render(this.#listComponent, this.#newPointComponent, RenderPosition.AFTERBEGIN);
   }
 
-  #renderPoint = (point) => {
-    const pointComponent = new PointView(point);
-    const pointEditComponent = new EditFormView(point);
-
-    const replaceCardToForm = () => {
-      replace(pointEditComponent, pointComponent);
-    };
-
-    const replaceFormToCard = () => {
-      replace(pointComponent, pointEditComponent);
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        replaceFormToCard();
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
-
-    pointComponent.setClickHandler(() => {
-      replaceCardToForm();
-      document.addEventListener('keydown', onEscKeyDown);
-    });
-
-    pointEditComponent.setFormSubmitHandler(() => {
-      replaceFormToCard();
-      document.addEventListener('keydown', onEscKeyDown);
-    });
-
-    render(this.#listComponent, pointComponent, RenderPosition.BEFOREEND);
-  }
-
   #renderPoints = () => {
+    const pointPresenter = new PointPresenter;
     for (let i = 0; i < this.#points.length - 1; i++) {
-      this.#renderPoint(this.#points[i]);
+      pointPresenter.renderPoint(this.#listComponent, this.#points[i]);
     }
   }
 
