@@ -1,4 +1,4 @@
-import { render, RenderPosition, replace } from '../utils/render';
+import { remove, render, RenderPosition, replace } from '../utils/render';
 import EditFormView from '../view/edit-form-view';
 import PointView from '../view/point-in-list-view';
 
@@ -12,6 +12,9 @@ export default class PointPresenter {
   }
 
   init = (point) => {
+    const prevPointComponent = this.#pointComponent;
+    const prevPointEditComponent = this.#pointEditComponent;
+
     this.#pointComponent = new PointView(point);
     this.#pointEditComponent = new EditFormView(point);
 
@@ -25,7 +28,25 @@ export default class PointPresenter {
       document.addEventListener('keydown', this.#onEscKeyDown);
     });
 
-    render(this.#listComponent, this.#pointComponent, RenderPosition.BEFOREEND);
+    if (prevPointComponent === null || prevPointEditComponent === null) {
+      render(this.#listComponent, this.#pointComponent, RenderPosition.BEFOREEND);
+    }
+
+    if (this.#listComponent.element.contains(prevPointComponent)) {
+      replace(this.#pointComponent, prevPointComponent);
+    }
+
+    if (this.#listComponent.element.contains(prevPointEditComponent)) {
+      replace(this.#pointEditComponent, prevPointEditComponent);
+    }
+
+    remove(prevPointComponent);
+    remove(prevPointEditComponent);
+  }
+
+  destroy = () => {
+    remove(this.#pointComponent);
+    remove(this.#pointEditComponent);
   }
 
   #replaceCardToForm = () => {
