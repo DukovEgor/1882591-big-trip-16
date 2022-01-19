@@ -1,3 +1,5 @@
+import { nanoid } from 'nanoid';
+
 const TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 const POINT_CITIES = ['Chamonix', 'Geneva', 'Paris', 'London', 'Ottawa', 'Luxemburg'];
 const POINT_OPTIONS = [
@@ -108,6 +110,7 @@ const generatePhotos = () => {
 };
 
 export const generatePoint = () => ({
+  id: nanoid(),
   type: TYPES[getRandomInteger(0, TYPES.length - 1)],
   reachPoint: POINT_CITIES[getRandomInteger(0, POINT_CITIES.length - 1)],
   options: POINT_OPTIONS[getRandomInteger(0, POINT_OPTIONS.length - 1)],

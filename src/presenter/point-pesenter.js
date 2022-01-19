@@ -6,12 +6,16 @@ export default class PointPresenter {
   #listComponent = null;
   #pointComponent = null;
   #pointEditComponent = null;
+  #changeData = null;
+  #point = null;
 
-  constructor(listComponent) {
+  constructor(listComponent, changeData) {
     this.#listComponent = listComponent;
+    this.#changeData = changeData;
   }
 
   init = (point) => {
+    this.#point = point;
     const prevPointComponent = this.#pointComponent;
     const prevPointEditComponent = this.#pointEditComponent;
 
@@ -23,20 +27,24 @@ export default class PointPresenter {
       document.addEventListener('keydown', this.#onEscKeyDown);
     });
 
+    this.#pointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+
     this.#pointEditComponent.setFormSubmitHandler(() => {
       this.#replaceFormToCard();
       document.addEventListener('keydown', this.#onEscKeyDown);
     });
 
+
     if (prevPointComponent === null || prevPointEditComponent === null) {
       render(this.#listComponent, this.#pointComponent, RenderPosition.BEFOREEND);
+      return;
     }
 
-    if (this.#listComponent.element.contains(prevPointComponent)) {
+    if (this.#listComponent.element.contains(prevPointComponent.element)) {
       replace(this.#pointComponent, prevPointComponent);
     }
 
-    if (this.#listComponent.element.contains(prevPointEditComponent)) {
+    if (this.#listComponent.element.contains(prevPointEditComponent.element)) {
       replace(this.#pointEditComponent, prevPointEditComponent);
     }
 
@@ -65,10 +73,12 @@ export default class PointPresenter {
     }
   };
 
-  #setFavoriteHandler = (pointComponent) => {
-    const favoriteButton = pointComponent.element.querySelector('.event__favorite-btn');
-    favoriteButton.addEventListener('change', () => {
+  #handleFavoriteClick = () => {
+    this.#changeData({...this.#point, isFavorite: !this.#point.isFavorite});
+  }
 
-    });
+  #handleFormSubmit = (point) => {
+    this.#changeData(point);
+    this.#replaceFormToCard();
   }
 }

@@ -7,6 +7,7 @@ import RouteView from '../view/route-total-view';
 import SiteSortView from '../view/sort-view.js';
 import NewPointView from '../view/creation-form-view.js';
 import PointPresenter from './point-pesenter.js';
+import { updateItem } from '../utils/utils.js';
 
 const pageHeader = document.querySelector('.page-header');
 const tripMain = pageHeader.querySelector('.trip-main');
@@ -22,6 +23,8 @@ export default class TripPresenter {
   #sortComponent = new SiteSortView;
   #newPointComponent = new NewPointView;
   #points = [];
+  #pointPresenter = new Map();
+
 
   constructor(points) {
     this.#points = points;
@@ -77,8 +80,9 @@ export default class TripPresenter {
   }
 
   #renderPoint = (point) => {
-    const pointPresenter = new PointPresenter(this.#listComponent);
+    const pointPresenter = new PointPresenter(this.#listComponent, this.#handlePointChange);
     pointPresenter.init(point);
+    this.#pointPresenter.set(point.id, pointPresenter);
   }
 
   #renderPoints = () => {
@@ -94,5 +98,16 @@ export default class TripPresenter {
   #renderList = () => {
     render(mainContent, this.#listComponent, RenderPosition.BEFOREEND);
   }
+
+  #clearList = () => {
+    this.#pointPresenter.forEach((presenter) => presenter.destroy());
+    this.#pointPresenter.clear();
+  }
+
+  #handlePointChange = (updatedPoint) => {
+    this.#points = updateItem(this.#points, updatedPoint);
+    this.#pointPresenter.get(updatedPoint.id).init(updatedPoint);
+  }
+
 }
 export { tripControlsFilters };
