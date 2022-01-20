@@ -50,6 +50,10 @@ export default class TripPresenter {
 
   }
 
+  #handleModeChange = () => {
+    this.#pointPresenter.forEach((presenter) => presenter.resetView());
+  }
+
   #renderTotalRoute = () => {
     render(tripMain, new RouteView(this.#points), RenderPosition.AFTERBEGIN);
   }
@@ -80,7 +84,7 @@ export default class TripPresenter {
   }
 
   #renderPoint = (point) => {
-    const pointPresenter = new PointPresenter(this.#listComponent, this.#handlePointChange);
+    const pointPresenter = new PointPresenter(this.#listComponent, this.#handlePointChange, this.#handleModeChange);
     pointPresenter.init(point);
     this.#pointPresenter.set(point.id, pointPresenter);
   }
