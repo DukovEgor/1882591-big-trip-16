@@ -1,11 +1,11 @@
 import { render, RenderPosition } from '../utils/render.js';
 import SiteFilterView from '../view/filter-view.js';
 import SiteMenuView from '../view/menu-view.js';
-import EmptyMessageView from '../view/list-empty-view.js';
-import ContentListView from '../view/content-list.js';
-import RouteView from '../view/route-total-view';
+import EmptyMessageView from '../view/empty-view.js';
+import ContentListView from '../view/list-view.js';
+import RouteView from '../view/route-view';
 import SiteSortView from '../view/sort-view.js';
-import NewPointView from '../view/creation-form-view.js';
+import NewPointView from '../view/form-view.js';
 import PointPresenter from './point-pesenter.js';
 import { updateItem } from '../utils/utils.js';
 

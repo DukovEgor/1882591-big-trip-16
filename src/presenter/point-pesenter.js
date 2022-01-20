@@ -1,6 +1,6 @@
 import { remove, render, RenderPosition, replace } from '../utils/render';
-import EditFormView from '../view/edit-form-view';
-import PointView from '../view/point-in-list-view';
+import EditFormView from '../view/edit-view';
+import PointView from '../view/point-view';
 
 export default class PointPresenter {
   #listComponent = null;
