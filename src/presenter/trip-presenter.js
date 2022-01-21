@@ -126,15 +126,6 @@ export default class TripPresenter {
       case SortType.PRICE:
         this.#points.sort(sortByPrice);
         break;
-      // case SortType.TIME:
-      //   this.#points.sort(sortByTime);
-      //   break;
-      // case SortType.EVENT:
-      //   this.#points.sort(sortByEvent);
-      //   break;
-      // case SortType.OFFER:
-      //   this.#points.sort(sortByOffer);
-      //   break;
       default:
         this.#points = [...this.#sourcedPoints];
     }
