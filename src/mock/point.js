@@ -1,3 +1,6 @@
+import dayjs from 'dayjs';
+import { nanoid } from 'nanoid';
+
 const TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 const POINT_CITIES = ['Chamonix', 'Geneva', 'Paris', 'London', 'Ottawa', 'Luxemburg'];
 const POINT_OPTIONS = [
@@ -107,11 +110,19 @@ const generatePhotos = () => {
   return photos;
 };
 
-export const generatePoint = () => ({
-  type: TYPES[getRandomInteger(0, TYPES.length - 1)],
-  reachPoint: POINT_CITIES[getRandomInteger(0, POINT_CITIES.length - 1)],
-  options: POINT_OPTIONS[getRandomInteger(0, POINT_OPTIONS.length - 1)],
-  description: generateDescription(),
-  photos: generatePhotos(),
-  price: getRandomInteger(100, 500),
-});
+
+const generateDate = () => dayjs().add(getRandomInteger(-10, 10), 'day').toDate();
+
+export const generatePoint = () => {
+  const dueDate = generateDate();
+  return {
+    id: nanoid(),
+    dueDate,
+    type: TYPES[getRandomInteger(0, TYPES.length - 1)],
+    reachPoint: POINT_CITIES[getRandomInteger(0, POINT_CITIES.length - 1)],
+    options: POINT_OPTIONS[getRandomInteger(0, POINT_OPTIONS.length - 1)],
+    description: generateDescription(),
+    photos: generatePhotos(),
+    price: getRandomInteger(100, 500),
+  };
+};
