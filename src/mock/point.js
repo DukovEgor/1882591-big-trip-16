@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { nanoid } from 'nanoid';
 
 const TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
-const POINT_CITIES = ['Chamonix', 'Geneva', 'Paris', 'London', 'Ottawa', 'Luxemburg'];
+const POINT_CITIES = ['Chamonix', 'Geneva', 'Amsterdam', 'Helsinki', 'Oslo', 'Kopenhagen', 'Den Haag', 'Rotterdam', 'Kioto', 'Frankfurt'];
 const POINT_OPTIONS = [
   {
     'type': 'taxi',

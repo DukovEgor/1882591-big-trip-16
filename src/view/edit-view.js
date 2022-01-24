@@ -1,7 +1,9 @@
 import { allCities, allOffers } from '../mock/point.js';
 import SmartView from './smart-view.js';
 const editPoint = (obj) => {
-  const { type, reachPoint, description, price } = obj;
+  const { type, reachPoint, price } = obj;
+  const offer = allOffers.find((index) => index.type === type);
+  const city = allCities.find((index) => index.name === reachPoint);
 
   const getOffer = (opt) => (
     `<div class="event__offer-selector">
@@ -15,8 +17,7 @@ const editPoint = (obj) => {
   );
 
   const getOffers = () => {
-    const offer = allOffers.find((index) => index.type === type);
-    if (offer.offers) {
+    if (offer.offers.length > 0) {
       return `<section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
@@ -26,6 +27,18 @@ const editPoint = (obj) => {
     </section>`;
     }
     return '';
+  };
+
+  const getPhoto = (pic) => (`<img class="event__photo" src="${pic.src}" alt="${pic.description}"></img>`);
+
+  const getPhotos = () => {
+    if (city.pictures.length > 0) {
+      return `<div class="event__photos-container">
+      <div class="event__photos-tape">
+      ${city.pictures.map((pic) => getPhoto(pic)).join('')}
+      </div>
+    </div>`;
+    }
   };
 
   const getCities = () => allCities.map((index) => `<option value="${index.name}"></option>`).join('');
@@ -97,7 +110,7 @@ const editPoint = (obj) => {
         ${type}
       </label>
       <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${reachPoint}" list="destination-list-1">
-      <datalist id="destination-list-1">
+      <datalist id="destination-list-1" class="destlist">
       ${getCities()}
       </datalist>
     </div>
@@ -128,7 +141,8 @@ const editPoint = (obj) => {
     ${getOffers()}
     <section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${description}</p>
+      <p class="event__destination-description">${city.description}</p>
+      ${getPhotos()}
     </section>
   </section>
 </form>
@@ -150,18 +164,23 @@ export default class EditFormView extends SmartView {
     this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
   }
 
-  setExitClickHandler = (callback) => {
-    this._callback.exitClick = callback;
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#exitClickHandler);
-  }
-
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
     this._callback.formSubmit(EditFormView.parseDataToPoint(this._data));
   }
 
+  setExitClickHandler = (callback) => {
+    this._callback.exitClick = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#exitClickHandler);
+  }
+
   #exitClickHandler = () => {
     this._callback.exitClick();
+  }
+
+  #setInnerHandlers = () => {
+    this.element.querySelector('.event__type-group').addEventListener('click', this.#typeChooserHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#cityChooserHandler);
   }
 
   #typeChooserHandler = (evt) => {
@@ -174,8 +193,11 @@ export default class EditFormView extends SmartView {
     });
   }
 
-  #setInnerHandlers = () => {
-    this.element.querySelector('.event__type-group').addEventListener('click', this.#typeChooserHandler);
+  #cityChooserHandler = (evt) => {
+    this._data.reachPoint = evt.target.value;
+    this.updateData({
+      reachPoint: this._data.reachPoint,
+    });
   }
 
   reset = (task) => {
