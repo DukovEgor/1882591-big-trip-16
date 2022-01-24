@@ -2,8 +2,8 @@ import { formatTaskDueDate } from '../utils/utils';
 import AbstractView from './absract-view';
 
 const createPoint = (obj) => {
-  const {type, reachPoint, options, price, isFavorite, dueDate} = obj;
-  const date = formatTaskDueDate(dueDate);
+  const {type, reachPoint, options, price, isFavorite, dateFrom} = obj;
+  const date = formatTaskDueDate(dateFrom);
 
   return `<li class="trip-events__item">
    <div class="event">

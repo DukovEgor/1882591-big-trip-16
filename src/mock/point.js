@@ -10,11 +10,11 @@ const POINT_OPTIONS = [
       {
         'id': 1,
         'title': 'Upgrade to a business class',
-        'price': 120
+        'price': 120,
       }, {
         'id': 2,
         'title': 'Choose the radio station',
-        'price': 60
+        'price': 60,
       }
     ]
   },
@@ -24,11 +24,11 @@ const POINT_OPTIONS = [
       {
         'id': 3,
         'title': 'Upgrade to a business class',
-        'price': 120
+        'price': 120,
       }, {
         'id': 4,
         'title': 'Choose the radio station',
-        'price': 60
+        'price': 60,
       }
     ]
   },
@@ -38,11 +38,11 @@ const POINT_OPTIONS = [
       {
         'id': 5,
         'title': 'Upgrade to a business class',
-        'price': 120
+        'price': 120,
       }, {
         'id': 6,
         'title': 'Choose the radio station',
-        'price': 60
+        'price': 60,
       }
     ]
   },
@@ -52,11 +52,11 @@ const POINT_OPTIONS = [
       {
         'id': 7,
         'title': 'Upgrade to a business class',
-        'price': 120
+        'price': 120,
       }, {
         'id': 8,
         'title': 'Choose the radio station',
-        'price': 60
+        'price': 60,
       }
     ]
   },
@@ -66,11 +66,11 @@ const POINT_OPTIONS = [
       {
         'id': 9,
         'title': 'Upgrade to a business class',
-        'price': 120
+        'price': 120,
       }, {
         'id': 10,
         'title': 'Choose the radio station',
-        'price': 60
+        'price': 60,
       }
     ]
   }
@@ -1190,7 +1190,8 @@ export const generatePoint = () => {
   const dueDate = generateDate();
   return {
     id: nanoid(),
-    dueDate,
+    dateFrom: dueDate,
+    dateTo: dueDate,
     type: TYPES[getRandomInteger(0, TYPES.length - 1)],
     reachPoint: POINT_CITIES[getRandomInteger(0, POINT_CITIES.length - 1)],
     options: POINT_OPTIONS[getRandomInteger(0, POINT_OPTIONS.length - 1)],

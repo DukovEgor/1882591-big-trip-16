@@ -44,7 +44,7 @@ const getWeightForNullDate = (dateA, dateB) => {
 const sortByDay = (taskA, taskB) => {
   const weight = getWeightForNullDate(taskA.dueDate, taskB.dueDate);
 
-  return weight ?? dayjs(taskA.dueDate).diff(dayjs(taskB.dueDate));
+  return weight ?? dayjs(taskA.dateFrom).diff(dayjs(taskB.dateFrom));
 };
 
 const sortByDayDown = (taskA, taskB) => {
