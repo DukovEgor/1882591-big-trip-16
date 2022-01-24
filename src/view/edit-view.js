@@ -1,6 +1,6 @@
-import AbstractView from './absract-view.js';
+import SmartView from './smart-view.js';
 const editPoint = (obj) => {
-  const { type, reachPoint, description } = obj;
+  const { type, reachPoint, description, price } = obj;
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
   <header class="event__header">
@@ -41,7 +41,7 @@ const editPoint = (obj) => {
           </div>
 
           <div class="event__type-item">
-            <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
+            <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight">
             <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
           </div>
 
@@ -88,7 +88,7 @@ const editPoint = (obj) => {
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="160">
+      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -158,12 +158,12 @@ const editPoint = (obj) => {
 </li>`;
 };
 
-export default class EditFormView extends AbstractView{
-  #point = null;
-
+export default class EditFormView extends SmartView {
   constructor(point) {
     super();
-    this.#point = point;
+    this._data = EditFormView.parsePointToData(point);
+
+    this.#setInnerHandlers();
   }
 
   setFormSubmitHandler = (callback) => {
@@ -173,10 +173,37 @@ export default class EditFormView extends AbstractView{
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this._callback.formSubmit(this.#point);
+    this._callback.formSubmit(EditFormView.parseDataToTask(this._data));
+  }
+
+  #typeChooserHandler = (evt) => {
+    if (evt.target.tagName !== 'INPUT') {
+      return;
+    }
+    this._data.type = evt.target.value;
+    this.updateData({
+      type: this._data.type,
+    });
+  }
+
+  #setInnerHandlers = () => {
+    this.element.querySelector('.event__type-group').addEventListener('click', this.#typeChooserHandler);
+  }
+
+  restoreHandlers = () => {
+    this.#setInnerHandlers();
+    this.setFormSubmitHandler(this._callback.formSubmit);
+  }
+
+  static parsePointToData = (point) => ({ ...point });
+
+  static parseDataToTask = (data) => {
+    const point = { ...data };
+
+    return point;
   }
 
   get template() {
-    return editPoint(this.#point);
+    return editPoint(this._data);
   }
 }

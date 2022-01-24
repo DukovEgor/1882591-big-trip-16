@@ -42,7 +42,7 @@ export default class TripPresenter {
     if (this.#points.length > 0) {
       this.#renderTotalRoute(this.#points);
       this.#renderSort();
-      this.#renderNewPointForm();
+      // this.#renderNewPointForm();
       this.#sortPoints(this.#currentSortType);
       this.#renderPoints();
       this.#renderList();
