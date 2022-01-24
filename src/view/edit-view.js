@@ -190,6 +190,12 @@ export default class EditFormView extends SmartView {
     this.element.querySelector('.event__type-group').addEventListener('click', this.#typeChooserHandler);
   }
 
+  reset = (task) => {
+    this.updateData(
+      EditFormView.parsePointToData(task),
+    );
+  }
+
   restoreHandlers = () => {
     this.#setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
