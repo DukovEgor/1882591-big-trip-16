@@ -159,6 +159,7 @@ const editPoint = (obj) => {
 };
 
 export default class EditFormView extends SmartView {
+  #point = null;
   constructor(point) {
     super();
     this._data = EditFormView.parsePointToData(point);
@@ -171,9 +172,18 @@ export default class EditFormView extends SmartView {
     this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
   }
 
+  setExitClickHandler = (callback) => {
+    this._callback.exitClick = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#exitClickHandler);
+  }
+
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
     this._callback.formSubmit(EditFormView.parseDataToTask(this._data));
+  }
+
+  #exitClickHandler = () => {
+    this._callback.exitClick();
   }
 
   #typeChooserHandler = (evt) => {
@@ -199,6 +209,7 @@ export default class EditFormView extends SmartView {
   restoreHandlers = () => {
     this.#setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setExitClickHandler(this._callback.exitClick);
   }
 
   static parsePointToData = (point) => ({ ...point });
