@@ -281,7 +281,7 @@ export const allOffers = [
     ]
   }
 ];
-export const allCities =[
+export const allCities = [
   {
     'name': 'Chamonix',
     'description': 'Chamonix, in a middle of Europe, middle-eastern paradise, famous for its crowded street markets with the best street food in Asia.',
@@ -1184,19 +1184,17 @@ const generatePhotos = () => {
 };
 
 
-const generateDate = () => dayjs().add(getRandomInteger(-10, 10), 'day').toDate();
+const generateDateFrom = () => dayjs().add(getRandomInteger(0, 20), 'day').add(getRandomInteger(0, 5), 'hour').add(getRandomInteger(0, 10), 'minute').toDate();
+const generateDateTo = () => dayjs().add(getRandomInteger(21, 30), 'day').add(getRandomInteger(6, 10), 'hour').add(getRandomInteger(0, 10), 'minute').toDate();
 
-export const generatePoint = () => {
-  const dueDate = generateDate();
-  return {
-    id: nanoid(),
-    dateFrom: dueDate,
-    dateTo: dueDate,
-    type: TYPES[getRandomInteger(0, TYPES.length - 1)],
-    reachPoint: POINT_CITIES[getRandomInteger(0, POINT_CITIES.length - 1)],
-    options: POINT_OPTIONS[getRandomInteger(0, POINT_OPTIONS.length - 1)],
-    description: generateDescription(),
-    photos: generatePhotos(),
-    price: getRandomInteger(100, 500),
-  };
-};
+export const generatePoint = () => ({
+  id: nanoid(),
+  dateFrom: generateDateFrom(),
+  dateTo: generateDateTo(),
+  type: TYPES[getRandomInteger(0, TYPES.length - 1)],
+  reachPoint: POINT_CITIES[getRandomInteger(0, POINT_CITIES.length - 1)],
+  options: POINT_OPTIONS[getRandomInteger(0, POINT_OPTIONS.length - 1)],
+  description: generateDescription(),
+  photos: generatePhotos(),
+  price: getRandomInteger(100, 500),
+});

@@ -1,24 +1,53 @@
-import { formatTaskDueDate } from '../utils/utils';
+import dayjs from 'dayjs';
+import { formatPointDueDate, formatPointTimes, getDiffTime } from '../utils/utils';
 import AbstractView from './absract-view';
 
+
 const createPoint = (obj) => {
-  const {type, reachPoint, options, price, isFavorite, dateFrom} = obj;
-  const date = formatTaskDueDate(dateFrom);
+  const { type, reachPoint, options, price, isFavorite, dateFrom, dateTo } = obj;
+
+  const datePoint = formatPointDueDate(dateFrom);
+
+  const convertTime = (time, format) => dayjs(time).format(format);
+
+
+  const getDuration = () => {
+    const ms = getDiffTime(dateFrom, dateTo);
+
+    let days = '';
+    let hours = '';
+    const minutes = `${convertTime(ms, 'mm')}M`;
+
+    if (convertTime(ms, 'DD') !== '00') {
+      days = `${convertTime(ms, 'DD')}D`;
+    }
+
+    if (convertTime(ms, 'hh') === '00' && days !== '') {
+      hours = '00H';
+    }
+
+    if (convertTime(ms, 'hh') !== '00') {
+      hours = `${convertTime(ms, 'hh')}H`;
+    }
+
+    return `${days} ${hours} ${minutes}`;
+  };
+
 
   return `<li class="trip-events__item">
    <div class="event">
-     <time class="event__date" datetime="2019-03-18">${date}</time>
+     <time class="event__date" datetime="2019-03-18">${datePoint}</time>
      <div class="event__type">
        <img class="event__type-icon" src="img/icons/${type}.png" alt="Event type icon" width="42" height="42">
      </div>
      <h3 class="event__title">${type} ${reachPoint}</h3>
      <div class="event__schedule">
        <p class="event__time">
-         <time class="event__start-time" datetime="2019-03-18T14:30">14:30</time>
+         <time class="event__start-time" datetime="2019-03-18T14:30">${formatPointTimes(dateFrom)}</time>
          —
-         <time class="event__end-time" datetime="2019-03-18T16:05">16:05</time>
+         <time class="event__end-time" datetime="2019-03-18T16:05">${formatPointTimes(dateTo)}</time>
        </p>
-       <p class="event__duration">01H 35M</p>
+       <p class="event__duration">${getDuration()}</p>
      </div>
      <p class="event__price">
        €&nbsp;<span class="event__price-value">${price}</span>
@@ -49,7 +78,7 @@ const createPoint = (obj) => {
  </li>`;
 };
 
-export default class PointView extends AbstractView{
+export default class PointView extends AbstractView {
   #point = null;
 
   constructor(point) {

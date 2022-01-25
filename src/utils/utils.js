@@ -23,7 +23,9 @@ const updateItem = (items, update) => {
   ];
 };
 
-export const formatTaskDueDate = (dueDate) => dueDate ? dayjs(dueDate).format('MMM D') : '';
+export const formatPointDueDate = (dueDate) => dueDate ? dayjs(dueDate).format('MMM D') : '';
+export const formatPointTimes = (dueTime) => dueTime ? dayjs(dueTime).format('HH:mm') : '';
+
 
 const getWeightForNullDate = (dateA, dateB) => {
   if (dateA === null && dateB === null) {
@@ -42,18 +44,26 @@ const getWeightForNullDate = (dateA, dateB) => {
 };
 
 const sortByDay = (taskA, taskB) => {
-  const weight = getWeightForNullDate(taskA.dueDate, taskB.dueDate);
+  const weight = getWeightForNullDate(taskA.dateFrom, taskB.dateFrom);
 
   return weight ?? dayjs(taskA.dateFrom).diff(dayjs(taskB.dateFrom));
 };
 
 const sortByDayDown = (taskA, taskB) => {
-  const weight = getWeightForNullDate(taskA.dueDate, taskB.dueDate);
+  const weight = getWeightForNullDate(taskA.dateFrom, taskB.dateFrom);
 
-  return weight ?? dayjs(taskB.dueDate).diff(dayjs(taskA.dueDate));
+  return weight ?? dayjs(taskB.dateFrom).diff(dayjs(taskA.dateFrom));
 };
 
 const sortByPrice = (a, b) => a.price - b.price;
 
+const getDiffTime = (dateFrom, dateTo) => {
+  const from = dayjs(dateFrom);
+  const to = dayjs(dateTo);
 
-export { howManyCities, updateItem, sortByDay, sortByDayDown, sortByPrice };
+  return to.diff(from);
+};
+
+const sortByTime = (firstPoint, secondPoint) => (dayjs(firstPoint.dateTo).unix() - dayjs(secondPoint.dateTo).unix()) - (dayjs(firstPoint.dateFrom).unix() - dayjs(secondPoint.dateFrom).unix());
+
+export { howManyCities, updateItem, sortByDay, sortByDayDown, sortByPrice, sortByTime, getDiffTime };
