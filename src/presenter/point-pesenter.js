@@ -35,7 +35,7 @@ export default class PointPresenter {
     this.#pointComponent.setClickHandler(this.#handleEditClick);
     this.#pointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#pointEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
-
+    this.#pointEditComponent.setExitClickHandler(this.#handleExitClick);
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
       render(this.#listComponent, this.#pointComponent, RenderPosition.BEFOREEND);
@@ -61,6 +61,7 @@ export default class PointPresenter {
 
   resetView = () => {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToCard();
     }
   }
@@ -80,6 +81,7 @@ export default class PointPresenter {
   #onEscKeyDown = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToCard();
       document.removeEventListener('keydown', this.#onEscKeyDown);
     }
@@ -90,8 +92,14 @@ export default class PointPresenter {
     document.addEventListener('keydown', this.#onEscKeyDown);
   }
 
+  #handleExitClick = () => {
+    this.#pointEditComponent.reset(this.#point);
+    this.#replaceFormToCard();
+    document.removeEventListener('keydown', this.#onEscKeyDown);
+  }
+
   #handleFavoriteClick = () => {
-    this.#changeData({...this.#point, isFavorite: !this.#point.isFavorite});
+    this.#changeData({ ...this.#point, isFavorite: !this.#point.isFavorite });
   }
 
   #handleFormSubmit = (point) => {

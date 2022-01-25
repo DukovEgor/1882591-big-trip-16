@@ -1,6 +1,52 @@
-import AbstractView from './absract-view.js';
+import { allCities, allOffers } from '../mock/point.js';
+import SmartView from './smart-view.js';
+import flatpickr from 'flatpickr';
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+
+
 const editPoint = (obj) => {
-  const { type, reachPoint, description } = obj;
+  const { type, reachPoint, price, dateFrom, dateTo } = obj;
+  const offer = allOffers.find((index) => index.type === type);
+  const city = allCities.find((index) => index.name === reachPoint);
+
+  const getOffer = (opt) => (
+    `<div class="event__offer-selector">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${opt.id}" type="checkbox" name="event-offer-luggage">
+    <label class="event__offer-label" for="event-offer-luggage-${opt.id}">
+      <span class="event__offer-title">${opt.title}</span>
+      &plus;&euro;&nbsp;
+      <span class="event__offer-price">${opt.price}</span>
+    </label>
+  </div>`
+  );
+
+  const getOffers = () => {
+    if (offer.offers.length > 0) {
+      return `<section class="event__section  event__section--offers">
+      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+
+      <div class="event__available-offers">
+      ${offer.offers.map((option) => getOffer(option)).join('')}
+      </div>
+    </section>`;
+    }
+    return '';
+  };
+
+  const getPhoto = (pic) => (`<img class="event__photo" src="${pic.src}" alt="${pic.description}"></img>`);
+
+  const getPhotos = () => {
+    if (city.pictures.length > 0) {
+      return `<div class="event__photos-container">
+      <div class="event__photos-tape">
+      ${city.pictures.map((pic) => getPhoto(pic)).join('')}
+      </div>
+    </div>`;
+    }
+  };
+
+  const getCities = () => allCities.map((index) => `<option value="${index.name}"></option>`).join('');
+
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
   <header class="event__header">
@@ -41,7 +87,7 @@ const editPoint = (obj) => {
           </div>
 
           <div class="event__type-item">
-            <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
+            <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight">
             <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
           </div>
 
@@ -68,19 +114,17 @@ const editPoint = (obj) => {
         ${type}
       </label>
       <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${reachPoint}" list="destination-list-1">
-      <datalist id="destination-list-1">
-        <option value="Amsterdam"></option>
-        <option value="Geneva"></option>
-        <option value="Chamonix"></option>
+      <datalist id="destination-list-1" class="destlist">
+      ${getCities()}
       </datalist>
     </div>
 
     <div class="event__field-group  event__field-group--time">
       <label class="visually-hidden" for="event-start-time-1">From</label>
-      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="18/03/19 12:25">
+      <input class="event__input  event__input--time event__input--time-from" id="event-start-time-1" type="text" name="event-start-time" value="${dateFrom}">
       &mdash;
       <label class="visually-hidden" for="event-end-time-1">To</label>
-      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="18/03/19 13:35">
+      <input class="event__input  event__input--time event__input--time-to" id="event-end-time-1" type="text" name="event-end-time" value="${dateTo}">
     </div>
 
     <div class="event__field-group  event__field-group--price">
@@ -88,7 +132,7 @@ const editPoint = (obj) => {
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="160">
+      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -98,72 +142,28 @@ const editPoint = (obj) => {
     </button>
   </header>
   <section class="event__details">
-    <section class="event__section  event__section--offers">
-      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-      <div class="event__available-offers">
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
-          <label class="event__offer-label" for="event-offer-luggage-1">
-            <span class="event__offer-title">Add luggage</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">50</span>
-          </label>
-        </div>
-
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked>
-          <label class="event__offer-label" for="event-offer-comfort-1">
-            <span class="event__offer-title">Switch to comfort</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">80</span>
-          </label>
-        </div>
-
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-meal-1" type="checkbox" name="event-offer-meal">
-          <label class="event__offer-label" for="event-offer-meal-1">
-            <span class="event__offer-title">Add meal</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">15</span>
-          </label>
-        </div>
-
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
-          <label class="event__offer-label" for="event-offer-seats-1">
-            <span class="event__offer-title">Choose seats</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">5</span>
-          </label>
-        </div>
-
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
-          <label class="event__offer-label" for="event-offer-train-1">
-            <span class="event__offer-title">Travel by train</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">40</span>
-          </label>
-        </div>
-      </div>
-    </section>
-
+    ${getOffers()}
     <section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${description}</p>
+      <p class="event__destination-description">${city.description}</p>
+      ${getPhotos()}
     </section>
   </section>
 </form>
 </li>`;
 };
 
-export default class EditFormView extends AbstractView{
+export default class EditFormView extends SmartView {
   #point = null;
+  #datepickerFrom = null;
+  #datepickerTo = null;
 
   constructor(point) {
     super();
-    this.#point = point;
+    this._data = EditFormView.parsePointToData(point);
+
+    this.#setInnerHandlers();
+    this.#setDatepicker();
   }
 
   setFormSubmitHandler = (callback) => {
@@ -173,10 +173,106 @@ export default class EditFormView extends AbstractView{
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this._callback.formSubmit(this.#point);
+    this._callback.formSubmit(EditFormView.parseDataToPoint(this._data));
+  }
+
+  setExitClickHandler = (callback) => {
+    this._callback.exitClick = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#exitClickHandler);
+  }
+
+  #exitClickHandler = () => {
+    this._callback.exitClick();
+  }
+
+  #setInnerHandlers = () => {
+    this.element.querySelector('.event__type-group').addEventListener('click', this.#typeChooserHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#cityChooserHandler);
+  }
+
+  #typeChooserHandler = (evt) => {
+    if (evt.target.tagName !== 'INPUT') {
+      return;
+    }
+    this._data.type = evt.target.value;
+    this.updateData({
+      type: this._data.type,
+    });
+  }
+
+  #cityChooserHandler = (evt) => {
+    this._data.reachPoint = evt.target.value;
+    this.updateData({
+      reachPoint: this._data.reachPoint,
+    });
+  }
+
+  #setDatepicker = () => {
+    this.#datepickerFrom = flatpickr(
+      this.element.querySelector('.event__input--time-from'),
+      {
+        dateFormat: 'd/m/y h:i',
+        defaultDate: this._data.dateFrom,
+        onChange: this.#dateFromChangeHandler,
+      },
+    );
+    this.#datepickerTo = flatpickr(
+      this.element.querySelector('.event__input--time-to'),
+      {
+        dateFormat: 'd/m/y h:i',
+        defaultDate: this._data.dateTo,
+        onChange: this.#dateToChangeHandler,
+      },
+    );
+  }
+
+  #dateFromChangeHandler = ([userDate]) => {
+    this.updateData({
+      dateFrom: userDate,
+    });
+  }
+
+  #dateToChangeHandler = ([userDate]) => {
+    this.updateData({
+      dateTo: userDate,
+    });
+  }
+
+  removeElement = () => {
+    super.removeElement();
+
+    if (this.#datepickerFrom) {
+      this.#datepickerFrom.destroy();
+      this.#datepickerFrom = null;
+    }
+    if (this.#datepickerTo) {
+      this.#datepickerTo.destroy();
+      this.#datepickerTo = null;
+    }
+  }
+
+  reset = (task) => {
+    this.updateData(
+      EditFormView.parsePointToData(task),
+    );
+  }
+
+  restoreHandlers = () => {
+    this.#setInnerHandlers();
+    this.#setDatepicker();
+    this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setExitClickHandler(this._callback.exitClick);
+  }
+
+  static parsePointToData = (point) => ({ ...point });
+
+  static parseDataToPoint = (data) => {
+    const point = { ...data };
+
+    return point;
   }
 
   get template() {
-    return editPoint(this.#point);
+    return editPoint(this._data);
   }
 }

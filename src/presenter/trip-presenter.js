@@ -7,7 +7,7 @@ import RouteView from '../view/route-view';
 import SiteSortView, { SortType } from '../view/sort-view.js';
 import NewPointView from '../view/form-view.js';
 import PointPresenter from './point-pesenter.js';
-import { sortByDay, sortByPrice, updateItem } from '../utils/utils.js';
+import { sortByDay, sortByPrice, sortByTime, updateItem } from '../utils/utils.js';
 
 const pageHeader = document.querySelector('.page-header');
 const tripMain = pageHeader.querySelector('.trip-main');
@@ -42,7 +42,7 @@ export default class TripPresenter {
     if (this.#points.length > 0) {
       this.#renderTotalRoute(this.#points);
       this.#renderSort();
-      this.#renderNewPointForm();
+      // this.#renderNewPointForm();
       this.#sortPoints(this.#currentSortType);
       this.#renderPoints();
       this.#renderList();
@@ -125,6 +125,9 @@ export default class TripPresenter {
         break;
       case SortType.PRICE:
         this.#points.sort(sortByPrice);
+        break;
+      case SortType.TIME:
+        this.#points.sort(sortByTime);
         break;
       default:
         this.#points = [...this.#sourcedPoints];
