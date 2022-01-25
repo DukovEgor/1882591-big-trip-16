@@ -1,5 +1,4 @@
-import dayjs from 'dayjs';
-import { formatPointDueDate, formatPointTimes, getDiffTime } from '../utils/utils';
+import { formatPointDueDate, formatPointTimes, getDuration } from '../utils/utils';
 import AbstractView from './absract-view';
 
 
@@ -7,31 +6,6 @@ const createPoint = (obj) => {
   const { type, reachPoint, options, price, isFavorite, dateFrom, dateTo } = obj;
 
   const datePoint = formatPointDueDate(dateFrom);
-
-  const convertTime = (time, format) => dayjs(time).format(format);
-
-
-  const getDuration = () => {
-    const ms = getDiffTime(dateFrom, dateTo);
-
-    let days = '';
-    let hours = '';
-    const minutes = `${convertTime(ms, 'mm')}M`;
-
-    if (convertTime(ms, 'DD') !== '00') {
-      days = `${convertTime(ms, 'DD')}D`;
-    }
-
-    if (convertTime(ms, 'hh') === '00' && days !== '') {
-      hours = '00H';
-    }
-
-    if (convertTime(ms, 'hh') !== '00') {
-      hours = `${convertTime(ms, 'hh')}H`;
-    }
-
-    return `${days} ${hours} ${minutes}`;
-  };
 
 
   return `<li class="trip-events__item">
@@ -47,7 +21,7 @@ const createPoint = (obj) => {
          —
          <time class="event__end-time" datetime="2019-03-18T16:05">${formatPointTimes(dateTo)}</time>
        </p>
-       <p class="event__duration">${getDuration()}</p>
+       <p class="event__duration">${getDuration(dateFrom, dateTo)}</p>
      </div>
      <p class="event__price">
        €&nbsp;<span class="event__price-value">${price}</span>
