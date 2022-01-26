@@ -1,5 +1,4 @@
-
-import { tripControlsFilters } from '../presenter/trip-presenter.js';
+import { tripControlsFilters } from '../main.js';
 import AbstractView from './absract-view.js';
 
 const messageVocabulary = {

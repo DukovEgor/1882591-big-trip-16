@@ -34,7 +34,7 @@ const getDiffTime = (dateFrom, dateTo) => {
   return to.diff(from);
 };
 
-function humanizeTime(n) {
+const humanizeTime = (n) => {
   const day = parseInt(n / (24 * 3600), 10);
 
   n = n % (24 * 3600);
@@ -43,7 +43,7 @@ function humanizeTime(n) {
   n %= 3600;
   const minutes = n / 60;
   return [day, hour, minutes.toFixed()];
-}
+};
 
 const getDuration = (dateFrom, dateTo) => {
   const ms = getDiffTime(dateFrom, dateTo);
