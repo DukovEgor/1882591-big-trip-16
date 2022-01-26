@@ -27,6 +27,38 @@ export const formatPointDueDate = (dueDate) => dueDate ? dayjs(dueDate).format('
 export const formatPointTimes = (dueTime) => dueTime ? dayjs(dueTime).format('HH:mm') : '';
 
 
+const convertTime = (time, format) => dayjs(time).format(format);
+
+const getDiffTime = (dateFrom, dateTo) => {
+  const from = dayjs(dateFrom);
+  const to = dayjs(dateTo);
+
+  return to.diff(from);
+};
+
+const getDuration = (dateFrom, dateTo) => {
+  const ms = getDiffTime(dateFrom, dateTo);
+
+  let days = '';
+  let hours = '';
+  const minutes = `${convertTime(ms, 'mm')}M`;
+
+  if (convertTime(ms, 'DD') !== '00') {
+    days = `${convertTime(ms, 'DD')}D`;
+  }
+
+  if (convertTime(ms, 'hh') === '00' && days !== '') {
+    hours = '00H';
+  }
+
+  if (convertTime(ms, 'hh') !== '00') {
+    hours = `${convertTime(ms, 'hh')}H`;
+  }
+
+  return `${days} ${hours} ${minutes}`;
+};
+
+
 const getWeightForNullDate = (dateA, dateB) => {
   if (dateA === null && dateB === null) {
     return 0;
@@ -57,13 +89,7 @@ const sortByDayDown = (taskA, taskB) => {
 
 const sortByPrice = (a, b) => a.price - b.price;
 
-const getDiffTime = (dateFrom, dateTo) => {
-  const from = dayjs(dateFrom);
-  const to = dayjs(dateTo);
-
-  return to.diff(from);
-};
 
 const sortByTime = (firstPoint, secondPoint) => (dayjs(firstPoint.dateTo).unix() - dayjs(secondPoint.dateTo).unix()) - (dayjs(firstPoint.dateFrom).unix() - dayjs(secondPoint.dateFrom).unix());
 
-export { howManyCities, updateItem, sortByDay, sortByDayDown, sortByPrice, sortByTime, getDiffTime };
+export { howManyCities, updateItem, sortByDay, sortByDayDown, sortByPrice, sortByTime, getDiffTime, getDuration };
