@@ -17,6 +17,8 @@ const mainContent = document.querySelector('.trip-events');
 
 
 export default class TripPresenter {
+  #pointsModel = null;
+
   #menuComponent = new SiteMenuView;
   #filterComponent = new SiteFilterView;
   #listComponent = new ContentListView;
@@ -27,9 +29,15 @@ export default class TripPresenter {
   #currentSortType = SortType.DAY;
   #sourcedPoints = [];
 
-  constructor(points) {
+  constructor(points, pointsModel) {
     this.#points = [...points];
     this.#sourcedPoints = [...points];
+
+    this.#pointsModel = pointsModel;
+  }
+
+  get points() {
+    return this.#pointsModel.points;
   }
 
   init = () => {

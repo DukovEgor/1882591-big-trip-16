@@ -27,8 +27,6 @@ export const formatPointDueDate = (dueDate) => dueDate ? dayjs(dueDate).format('
 export const formatPointTimes = (dueTime) => dueTime ? dayjs(dueTime).format('HH:mm') : '';
 
 
-const convertTime = (time, format) => dayjs(time).format(format);
-
 const getDiffTime = (dateFrom, dateTo) => {
   const from = dayjs(dateFrom);
   const to = dayjs(dateTo);
@@ -36,24 +34,39 @@ const getDiffTime = (dateFrom, dateTo) => {
   return to.diff(from);
 };
 
+function humanizeTime(n) {
+  const day = parseInt(n / (24 * 3600), 10);
+
+  n = n % (24 * 3600);
+  const hour = parseInt(n / 3600, 10);
+
+  n %= 3600;
+  const minutes = n / 60;
+  return [day, hour, minutes.toFixed()];
+}
+
 const getDuration = (dateFrom, dateTo) => {
   const ms = getDiffTime(dateFrom, dateTo);
+  const humanTimeFormat = humanizeTime(ms / 1000);
 
   let days = '';
   let hours = '';
-  const minutes = `${convertTime(ms, 'mm')}M`;
+  let minutes = `${humanTimeFormat[2]}M`;
 
-  if (convertTime(ms, 'DD') !== '00') {
-    days = `${convertTime(ms, 'DD')}D`;
+  if (humanTimeFormat[0] !== 0) {
+    days = `${humanTimeFormat[0] < 10 ? '0' : ''}${humanTimeFormat[0]}D`;
   }
 
-  if (convertTime(ms, 'hh') === '00' && days !== '') {
+
+  if (humanTimeFormat[1] === 0 && days !== '') {
     hours = '00H';
   }
 
-  if (convertTime(ms, 'hh') !== '00') {
-    hours = `${convertTime(ms, 'hh')}H`;
+  if (humanTimeFormat[1] !== 0) {
+    hours = `${humanTimeFormat[1] < 10 ? '0' : ''}${humanTimeFormat[1]}H`;
   }
+
+  minutes = `${humanTimeFormat[2] < 10 ? '0' : ''}${humanTimeFormat[2]}M`;
 
   return `${days} ${hours} ${minutes}`;
 };
@@ -90,6 +103,6 @@ const sortByDayDown = (taskA, taskB) => {
 const sortByPrice = (a, b) => a.price - b.price;
 
 
-const sortByTime = (firstPoint, secondPoint) => (dayjs(firstPoint.dateTo).unix() - dayjs(secondPoint.dateTo).unix()) - (dayjs(firstPoint.dateFrom).unix() - dayjs(secondPoint.dateFrom).unix());
+const sortByTime = (firstPoint, secondPoint) => (dayjs(firstPoint.dateTo) - dayjs(secondPoint.dateTo)) - (dayjs(firstPoint.dateFrom) - dayjs(secondPoint.dateFrom));
 
 export { howManyCities, updateItem, sortByDay, sortByDayDown, sortByPrice, sortByTime, getDiffTime, getDuration };
