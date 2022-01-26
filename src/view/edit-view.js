@@ -154,7 +154,6 @@ const editPoint = (obj) => {
 };
 
 export default class EditFormView extends SmartView {
-  #point = null;
   #datepickerFrom = null;
   #datepickerTo = null;
 
@@ -194,17 +193,22 @@ export default class EditFormView extends SmartView {
     if (evt.target.tagName !== 'INPUT') {
       return;
     }
+
     this._data.type = evt.target.value;
+    this.element.querySelector('.event__type-icon').src = `img/icons/${evt.target.value}.png`;
+    this.element.querySelector('.event__type-toggle').checked = false;
+    this.element.querySelector('.event__type-output').textContent = `${evt.target.value}`;
+
     this.updateData({
       type: this._data.type,
-    });
+    }, true);
   }
 
   #cityChooserHandler = (evt) => {
     this._data.reachPoint = evt.target.value;
     this.updateData({
       reachPoint: this._data.reachPoint,
-    });
+    }, true);
   }
 
   #setDatepicker = () => {
@@ -229,13 +233,13 @@ export default class EditFormView extends SmartView {
   #dateFromChangeHandler = ([userDate]) => {
     this.updateData({
       dateFrom: userDate,
-    });
+    }, true);
   }
 
   #dateToChangeHandler = ([userDate]) => {
     this.updateData({
       dateTo: userDate,
-    });
+    }, true);
   }
 
   removeElement = () => {
