@@ -19,6 +19,7 @@ export default class TripPresenter {
   #newPointComponent = new NewPointView;
   #pointPresenter = new Map();
   #currentSortType = SortType.DAY;
+  #routeComponent = null;
 
   constructor(pointsModel) {
     this.#pointsModel = pointsModel;
@@ -41,9 +42,7 @@ export default class TripPresenter {
 
   init = () => {
     this.#setFilterHandler();
-
     this.#renderBoard();
-
   }
 
   #handleModeChange = () => {
@@ -51,7 +50,8 @@ export default class TripPresenter {
   }
 
   #renderTotalRoute = () => {
-    render(tripMain, new RouteView(this.points), RenderPosition.AFTERBEGIN);
+    this.#routeComponent = new RouteView(this.points.sort(sortByDay));
+    render(tripMain, this.#routeComponent, RenderPosition.AFTERBEGIN);
   }
 
   #setFilterHandler = () => {
@@ -91,18 +91,14 @@ export default class TripPresenter {
     render(mainContent, this.#listComponent, RenderPosition.BEFOREEND);
   }
 
-  #clearList = () => {
-    this.#pointPresenter.forEach((presenter) => presenter.destroy());
-    this.#pointPresenter.clear();
-  }
-
   #clearBoard = ({resetSortType = false} = {}) => {
 
     this.#pointPresenter.forEach((presenter) => presenter.destroy());
     this.#pointPresenter.clear();
 
     remove(this.#sortComponent);
-    remove(new EmptyMessageView);
+    remove(this.#routeComponent);
+    // remove(new EmptyMessageView);
 
 
     if (resetSortType) {
@@ -111,14 +107,14 @@ export default class TripPresenter {
   }
 
   #renderBoard = () => {
-    if (this.points === 0) {
+    if (this.points.length === 0) {
       this.#renderEmptyMessage();
       return;
     }
-
+    this.#renderTotalRoute();
     this.#renderSort();
-    this.#renderList();
     this.#renderPoints(this.points);
+    this.#renderList();
   }
 
   #handleViewAction = (actionType, updateType, update) => {

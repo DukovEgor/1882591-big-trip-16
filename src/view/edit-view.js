@@ -175,6 +175,16 @@ export default class EditFormView extends SmartView {
     this._callback.formSubmit(EditFormView.parseDataToPoint(this._data));
   }
 
+  setDeleteClickHandler = (callback) => {
+    this._callback.deleteClick = callback;
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
+  }
+
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.deleteClick(EditFormView.parseDataToPoint(this._data));
+  }
+
   setExitClickHandler = (callback) => {
     this._callback.exitClick = callback;
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#exitClickHandler);
@@ -215,6 +225,7 @@ export default class EditFormView extends SmartView {
     this.#datepickerFrom = flatpickr(
       this.element.querySelector('.event__input--time-from'),
       {
+        enableTime: true,
         dateFormat: 'd/m/y h:i',
         defaultDate: this._data.dateFrom,
         onChange: this.#dateFromChangeHandler,
@@ -223,6 +234,8 @@ export default class EditFormView extends SmartView {
     this.#datepickerTo = flatpickr(
       this.element.querySelector('.event__input--time-to'),
       {
+        enableTime: true,
+        minDate: this._data.dateFrom,
         dateFormat: 'd/m/y h:i',
         defaultDate: this._data.dateTo,
         onChange: this.#dateToChangeHandler,
@@ -266,6 +279,7 @@ export default class EditFormView extends SmartView {
     this.#setDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setExitClickHandler(this._callback.exitClick);
+    this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
   static parsePointToData = (point) => ({ ...point });

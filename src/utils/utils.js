@@ -58,6 +58,8 @@ const getDuration = (dateFrom, dateTo) => {
   return `${days} ${hours} ${minutes}`;
 };
 
+const isDatesEqual = (dateA, dateB) => dayjs(dateA).isSame(dateB, 'm');
+const isPricesEqual = (priceA, priceB) => priceA === priceB;
 
 const getWeightForNullDate = (dateA, dateB) => {
   if (dateA === null && dateB === null) {
@@ -92,4 +94,4 @@ const sortByPrice = (a, b) => a.price - b.price;
 
 const sortByTime = (firstPoint, secondPoint) => (dayjs(firstPoint.dateTo) - dayjs(secondPoint.dateTo)) - (dayjs(firstPoint.dateFrom) - dayjs(secondPoint.dateFrom));
 
-export { howManyCities, sortByDay, sortByDayDown, sortByPrice, sortByTime, getDiffTime, getDuration };
+export { howManyCities, sortByDay, sortByDayDown, sortByPrice, sortByTime, getDiffTime, getDuration, isDatesEqual, isPricesEqual };
