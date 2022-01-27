@@ -6,7 +6,7 @@ import SiteFilterView from './view/filter-view.js';
 import SiteMenuView from './view/menu-view.js';
 
 
-const MOCK_COUNTER = 20;
+const MOCK_COUNTER = 10;
 const points = Array.from({ length: MOCK_COUNTER }, generatePoint);
 
 const pointsModel = new PointsModel();

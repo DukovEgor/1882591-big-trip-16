@@ -1,3 +1,4 @@
+import { UpdateType, UserAction } from '../utils/const';
 import { remove, render, RenderPosition, replace } from '../utils/render';
 import EditFormView from '../view/edit-view';
 import PointView from '../view/point-view';
@@ -99,11 +100,19 @@ export default class PointPresenter {
   }
 
   #handleFavoriteClick = () => {
-    this.#changeData({ ...this.#point, isFavorite: !this.#point.isFavorite });
+    this.#changeData(
+      UserAction.UPDATE_POINT,
+      UpdateType.PATCH,
+      { ...this.#point, isFavorite: !this.#point.isFavorite },
+    );
   }
 
   #handleFormSubmit = (point) => {
-    this.#changeData(point);
+    this.#changeData(
+      UserAction.UPDATE_TASK,
+      UpdateType.MINOR,
+      point,
+    );
     this.#replaceFormToCard();
   }
 }
