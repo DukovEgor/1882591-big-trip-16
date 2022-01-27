@@ -1,4 +1,5 @@
 import { generatePoint } from './mock/point.js';
+import FilterModel from './model/filter-model.js';
 import PointsModel from './model/points-model.js';
 import TripPresenter from './presenter/trip-presenter.js';
 import { render, RenderPosition } from './utils/render.js';
@@ -11,6 +12,8 @@ const points = Array.from({ length: MOCK_COUNTER }, generatePoint);
 
 const pointsModel = new PointsModel();
 pointsModel.points = points;
+
+const filterModel = new FilterModel();
 
 const pageHeader = document.querySelector('.page-header');
 const tripControlsNavigation = pageHeader.querySelector('.trip-controls__navigation');
