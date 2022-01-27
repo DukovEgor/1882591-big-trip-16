@@ -1,20 +1,23 @@
-import { tripControlsFilters } from '../main.js';
+import { FilterType } from '../utils/const.js';
 import AbstractView from './absract-view.js';
 
 const messageVocabulary = {
-  past: 'There are no past events now',
-  everything: 'Click New Event to create your first point',
-  future: 'There are no future events now',
+  [FilterType.EVERYTHING]: 'Click New Event to create your first point',
+  [FilterType.FUTURE]: 'There are no future events now',
+  [FilterType.PAST]: 'There are no past events now',
 };
 
-const createEmptyMessage = () => {
-  const filterFormCheckedInput = tripControlsFilters.querySelector('input:checked');
-  return `<p class="trip-events__msg">${messageVocabulary[filterFormCheckedInput.value]}</p>`;
-};
+const createEmptyMessage = (data) => (
+  `<p class="trip-events__msg">${messageVocabulary[data]}</p>`
+);
 
-export default class EmptyMessageView extends AbstractView{
+export default class EmptyMessageView extends AbstractView {
+  constructor(data) {
+    super();
+    this._data = data;
+  }
 
   get template() {
-    return createEmptyMessage();
+    return createEmptyMessage(this._data);
   }
 }

@@ -6,13 +6,15 @@ import SiteSortView, { SortType } from '../view/sort-view.js';
 import NewPointView from '../view/form-view.js';
 import PointPresenter from './point-pesenter.js';
 import { sortByDay, sortByPrice, sortByTime } from '../utils/utils.js';
-import { UpdateType, UserAction } from '../utils/const.js';
+import { FilterType, UpdateType, UserAction } from '../utils/const.js';
+import { filter } from '../utils/filter.js';
 
 const mainContent = document.querySelector('.trip-events');
 const tripMain = document.querySelector('.trip-main');
 
 export default class TripPresenter {
   #pointsModel = null;
+  #filterModel = null;
 
   #sortComponent = null;
   #routeComponent = null;
@@ -24,24 +26,31 @@ export default class TripPresenter {
   #pointPresenter = new Map();
 
   #currentSortType = SortType.DAY;
+  #filterType = FilterType.EVERYTHING;
 
-  constructor(pointsModel) {
+  constructor(pointsModel, filterModel) {
     this.#pointsModel = pointsModel;
+    this.#filterModel = filterModel;
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
   get points() {
+    this.#filterType = this.#filterModel.filter;
+    const points = this.#pointsModel.points;
+    const filteredPoints = filter[this.#filterType](points);
+
     switch (this.#currentSortType) {
       case SortType.DAY:
-        return [...this.#pointsModel.points].sort(sortByDay);
+        return filteredPoints.sort(sortByDay);
       case SortType.PRICE:
-        return [...this.#pointsModel.points].sort(sortByPrice);
+        return filteredPoints.sort(sortByPrice);
       case SortType.TIME:
-        return [...this.#pointsModel.points].sort(sortByTime);
+        return filteredPoints.sort(sortByTime);
     }
 
-    return this.#pointsModel.points;
+    return filteredPoints;
   }
 
   init = () => {
@@ -88,7 +97,7 @@ export default class TripPresenter {
   }
 
   #renderEmptyMessage = () => {
-    this.#emptyMessageComponent = new EmptyMessageView;
+    this.#emptyMessageComponent = new EmptyMessageView(this.#filterType);
     render(mainContent, this.#emptyMessageComponent, RenderPosition.BEFOREEND);
   }
 
@@ -103,8 +112,10 @@ export default class TripPresenter {
 
     remove(this.#sortComponent);
     remove(this.#routeComponent);
-    remove(this.#emptyMessageComponent);
 
+    if (this.#emptyMessageComponent) {
+      remove(this.#emptyMessageComponent);
+    }
 
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
