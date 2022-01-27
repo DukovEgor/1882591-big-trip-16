@@ -9,6 +9,20 @@ import SiteMenuView from './view/menu-view.js';
 
 const MOCK_COUNTER = 10;
 const points = Array.from({ length: MOCK_COUNTER }, generatePoint);
+const filters = [
+  {
+    type: 'everything',
+    name: 'EVERITHING',
+  },
+  {
+    type: 'future',
+    name: 'FUTURE',
+  },
+  {
+    type: 'past',
+    name: 'PAST',
+  },
+];
 
 const pointsModel = new PointsModel();
 pointsModel.points = points;
@@ -22,7 +36,7 @@ export const tripControlsFilters = pageHeader.querySelector('.trip-controls__fil
 const tripPresenter = new TripPresenter(pointsModel);
 
 render(tripControlsNavigation, new SiteMenuView, RenderPosition.BEFOREEND);
-render(tripControlsFilters, new SiteFilterView, RenderPosition.BEFOREEND);
+render(tripControlsFilters, new SiteFilterView(filters, 'everything'), RenderPosition.BEFOREEND);
 
 tripPresenter.init();
 
