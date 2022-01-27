@@ -14,12 +14,16 @@ const tripMain = document.querySelector('.trip-main');
 export default class TripPresenter {
   #pointsModel = null;
 
-  #listComponent = new ContentListView;
   #sortComponent = null;
-  #newPointComponent = new NewPointView;
-  #pointPresenter = new Map();
-  #currentSortType = SortType.DAY;
   #routeComponent = null;
+  #emptyMessageComponent = null;
+
+  #listComponent = new ContentListView;
+  #newPointComponent = new NewPointView;
+
+  #pointPresenter = new Map();
+
+  #currentSortType = SortType.DAY;
 
   constructor(pointsModel) {
     this.#pointsModel = pointsModel;
@@ -84,7 +88,8 @@ export default class TripPresenter {
   }
 
   #renderEmptyMessage = () => {
-    render(mainContent, new EmptyMessageView, RenderPosition.BEFOREEND);
+    this.#emptyMessageComponent = new EmptyMessageView;
+    render(mainContent, this.#emptyMessageComponent, RenderPosition.BEFOREEND);
   }
 
   #renderList = () => {
@@ -98,7 +103,7 @@ export default class TripPresenter {
 
     remove(this.#sortComponent);
     remove(this.#routeComponent);
-    // remove(new EmptyMessageView);
+    remove(this.#emptyMessageComponent);
 
 
     if (resetSortType) {
