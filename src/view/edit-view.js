@@ -2,7 +2,17 @@ import { allCities, allOffers } from '../mock/point.js';
 import SmartView from './smart-view.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+import dayjs from 'dayjs';
 
+
+const BLANK_POINT = {
+  dateFrom: dayjs().toDate(),
+  dateTo: dayjs().toDate(),
+  type: 'train',
+  reachPoint: '',
+  photos: [],
+  price: 0,
+};
 
 const editPoint = (obj) => {
   const { type, reachPoint, price, dateFrom, dateTo } = obj;
@@ -21,7 +31,7 @@ const editPoint = (obj) => {
   );
 
   const getOffers = () => {
-    if (offer.offers.length > 0) {
+    if (offer && offer.offers.length > 0) {
       return `<section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
@@ -36,16 +46,28 @@ const editPoint = (obj) => {
   const getPhoto = (pic) => (`<img class="event__photo" src="${pic.src}" alt="${pic.description}"></img>`);
 
   const getPhotos = () => {
-    if (city.pictures.length > 0) {
+    if (city && city.pictures.length > 0) {
       return `<div class="event__photos-container">
       <div class="event__photos-tape">
       ${city.pictures.map((pic) => getPhoto(pic)).join('')}
       </div>
     </div>`;
     }
+    return '';
   };
 
   const getCities = () => allCities.map((index) => `<option value="${index.name}"></option>`).join('');
+
+  const getDestinationSection = () => {
+    if (city ? city.pictures || city.description : false) {
+      return `<section class="event__section  event__section--destination">
+      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+      <p class="event__destination-description">${city ? city.description : ''}</p>
+      ${getPhotos()}
+    </section>`;
+    }
+    return '';
+  };
 
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -143,10 +165,7 @@ const editPoint = (obj) => {
   </header>
   <section class="event__details">
     ${getOffers()}
-    <section class="event__section  event__section--destination">
-      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${city.description}</p>
-      ${getPhotos()}
+    ${getDestinationSection()}
     </section>
   </section>
 </form>
@@ -157,7 +176,7 @@ export default class EditFormView extends SmartView {
   #datepickerFrom = null;
   #datepickerTo = null;
 
-  constructor(point) {
+  constructor(point = BLANK_POINT) {
     super();
     this._data = EditFormView.parsePointToData(point);
 

@@ -8,6 +8,7 @@ import PointPresenter from './point-pesenter.js';
 import { sortByDay, sortByPrice, sortByTime } from '../utils/utils.js';
 import { FilterType, UpdateType, UserAction } from '../utils/const.js';
 import { filter } from '../utils/filter.js';
+import PointNewPresenter from './point-new-presenter.js';
 
 const mainContent = document.querySelector('.trip-events');
 const tripMain = document.querySelector('.trip-main');
@@ -24,6 +25,7 @@ export default class TripPresenter {
   #newPointComponent = new NewPointView;
 
   #pointPresenter = new Map();
+  #pointNewPresenter = null;
 
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
@@ -31,6 +33,8 @@ export default class TripPresenter {
   constructor(pointsModel, filterModel) {
     this.#pointsModel = pointsModel;
     this.#filterModel = filterModel;
+
+    this.#pointNewPresenter = new PointNewPresenter(this.#listComponent, this.#handleViewAction);
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
@@ -58,7 +62,14 @@ export default class TripPresenter {
     this.#renderBoard();
   }
 
+  createPoint = () => {
+    this.#currentSortType = SortType.DAY;
+    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this.#pointNewPresenter.init();
+  }
+
   #handleModeChange = () => {
+    this.#pointNewPresenter.destroy();
     this.#pointPresenter.forEach((presenter) => presenter.resetView());
   }
 
