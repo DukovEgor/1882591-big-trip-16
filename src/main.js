@@ -7,7 +7,7 @@ import { render, RenderPosition } from './utils/render.js';
 import SiteMenuView from './view/menu-view.js';
 
 
-const MOCK_COUNTER = 10;
+const MOCK_COUNTER = 0;
 const points = Array.from({ length: MOCK_COUNTER }, generatePoint);
 
 const pointsModel = new PointsModel();

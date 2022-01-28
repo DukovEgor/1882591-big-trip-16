@@ -136,6 +136,7 @@ export default class TripPresenter {
   #renderBoard = () => {
     if (this.points.length === 0) {
       this.#renderEmptyMessage();
+      this.#renderList();
       return;
     }
     this.#renderTotalRoute();
