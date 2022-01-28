@@ -30,6 +30,7 @@ tripPresenter.init();
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
   evt.preventDefault();
+  evt.target.disabled = true;
   tripPresenter.createPoint();
 });
 

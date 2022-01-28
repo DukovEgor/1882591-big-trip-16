@@ -2,19 +2,9 @@ import { allCities, allOffers } from '../mock/point.js';
 import SmartView from './smart-view.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
-import dayjs from 'dayjs';
+import he from 'he';
 
-
-const BLANK_POINT = {
-  dateFrom: dayjs().toDate(),
-  dateTo: dayjs().toDate(),
-  type: 'train',
-  reachPoint: '',
-  photos: [],
-  price: 0,
-};
-
-const editPoint = (obj) => {
+const editPoint = (obj, isNew) => {
   const { type, reachPoint, price, dateFrom, dateTo } = obj;
   const offer = allOffers.find((index) => index.type === type);
   const city = allCities.find((index) => index.name === reachPoint);
@@ -135,7 +125,7 @@ const editPoint = (obj) => {
       <label class="event__label  event__type-output" for="event-destination-1">
         ${type}
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${reachPoint}" list="destination-list-1">
+      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(reachPoint)}" list="destination-list-1">
       <datalist id="destination-list-1" class="destlist">
       ${getCities()}
       </datalist>
@@ -154,14 +144,13 @@ const editPoint = (obj) => {
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
+      <input class="event__input  event__input--price" id="event-price-1" type="number" min="0" name="event-price" value="${he.encode(String(price))}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-    <button class="event__reset-btn" type="reset">Delete</button>
-    <button class="event__rollup-btn" type="button">
-      <span class="visually-hidden">Open event</span>
-    </button>
+    ${isNew ? '<button class="event__reset-btn" type="reset">Cancel</button>' : `<button class="event__reset-btn" type="reset">Delete</button><button class="event__rollup-btn" type="button">
+  <span class="visually-hidden">Open event</span>
+</button>`}
   </header>
   <section class="event__details">
     ${getOffers()}
@@ -176,9 +165,10 @@ export default class EditFormView extends SmartView {
   #datepickerFrom = null;
   #datepickerTo = null;
 
-  constructor(point = BLANK_POINT) {
+  constructor(point, isNew = false) {
     super();
     this._data = EditFormView.parsePointToData(point);
+    this._isNew = isNew;
 
     this.#setInnerHandlers();
     this.#setDatepicker();
@@ -214,8 +204,16 @@ export default class EditFormView extends SmartView {
   }
 
   #setInnerHandlers = () => {
+    this.element.querySelector('.event__input--price').addEventListener('change', this.#priceEnterHandler);
     this.element.querySelector('.event__type-group').addEventListener('click', this.#typeChooserHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#cityChooserHandler);
+  }
+
+  #priceEnterHandler = (evt) => {
+    this._data.price = evt.target.value;
+    this.updateData({
+      price: Number(this._data.price),
+    });
   }
 
   #typeChooserHandler = (evt) => {
@@ -230,14 +228,14 @@ export default class EditFormView extends SmartView {
 
     this.updateData({
       type: this._data.type,
-    }, true);
+    });
   }
 
   #cityChooserHandler = (evt) => {
     this._data.reachPoint = evt.target.value;
     this.updateData({
       reachPoint: this._data.reachPoint,
-    }, true);
+    });
   }
 
   #setDatepicker = () => {
@@ -297,7 +295,11 @@ export default class EditFormView extends SmartView {
     this.#setInnerHandlers();
     this.#setDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
-    this.setExitClickHandler(this._callback.exitClick);
+
+    if (!this._isNew) {
+      this.setExitClickHandler(this._callback.exitClick);
+    }
+
     this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
@@ -310,6 +312,6 @@ export default class EditFormView extends SmartView {
   }
 
   get template() {
-    return editPoint(this._data);
+    return editPoint(this._data, this._isNew);
   }
 }

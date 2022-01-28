@@ -1,12 +1,23 @@
+import dayjs from 'dayjs';
 import { nanoid } from 'nanoid';
 import { UpdateType, UserAction } from '../utils/const';
 import { remove, render, RenderPosition } from '../utils/render';
 import EditFormView from '../view/edit-view';
 
+const BLANK_POINT = {
+  dateFrom: dayjs().toDate(),
+  dateTo: dayjs().toDate(),
+  type: 'train',
+  reachPoint: '',
+  photos: [],
+  price: 0,
+};
+
 export default class PointNewPresenter {
   #pointListContainer = null;
   #changeData = null;
   #pointEditComponent = null;
+  _newPointButton = document.querySelector('.trip-main__event-add-btn');
 
   constructor(pointListContainer, changeData) {
     this.#pointListContainer = pointListContainer;
@@ -18,7 +29,7 @@ export default class PointNewPresenter {
       return;
     }
 
-    this.#pointEditComponent = new EditFormView();
+    this.#pointEditComponent = new EditFormView(BLANK_POINT, true);
     this.#pointEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#pointEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
 
@@ -45,10 +56,12 @@ export default class PointNewPresenter {
       {id: nanoid(), ...point},
     );
     this.destroy();
+    this._newPointButton.disabled = false;
   }
 
   #handleDeleteClick = () => {
     this.destroy();
+    this._newPointButton.disabled = false;
   }
 
   #escKeyDownHandler = (evt) => {
