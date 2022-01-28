@@ -9,25 +9,10 @@ const howManyCities = (arr) => {
   return `${arr[0].reachPoint} &mdash; ${arr.length > 3 ? '...' : arr[1].reachPoint} &mdash; ${arr[arr.length - 1].reachPoint}`;
 };
 
-const updateItem = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
-
-  if (index === -1) {
-    return items;
-  }
-
-  return [
-    ...items.slice(0, index),
-    update,
-    ...items.slice(index + 1),
-  ];
-};
 
 export const formatPointDueDate = (dueDate) => dueDate ? dayjs(dueDate).format('MMM D') : '';
 export const formatPointTimes = (dueTime) => dueTime ? dayjs(dueTime).format('HH:mm') : '';
 
-
-const convertTime = (time, format) => dayjs(time).format(format);
 
 const getDiffTime = (dateFrom, dateTo) => {
   const from = dayjs(dateFrom);
@@ -36,28 +21,45 @@ const getDiffTime = (dateFrom, dateTo) => {
   return to.diff(from);
 };
 
+const humanizeTime = (n) => {
+  const day = parseInt(n / (24 * 3600), 10);
+
+  n = n % (24 * 3600);
+  const hour = parseInt(n / 3600, 10);
+
+  n %= 3600;
+  const minutes = n / 60;
+  return [day, hour, minutes.toFixed()];
+};
+
 const getDuration = (dateFrom, dateTo) => {
   const ms = getDiffTime(dateFrom, dateTo);
+  const humanTimeFormat = humanizeTime(ms / 1000);
 
   let days = '';
   let hours = '';
-  const minutes = `${convertTime(ms, 'mm')}M`;
+  let minutes = `${humanTimeFormat[2]}M`;
 
-  if (convertTime(ms, 'DD') !== '00') {
-    days = `${convertTime(ms, 'DD')}D`;
+  if (humanTimeFormat[0] !== 0) {
+    days = `${humanTimeFormat[0] < 10 ? '0' : ''}${humanTimeFormat[0]}D`;
   }
 
-  if (convertTime(ms, 'hh') === '00' && days !== '') {
+
+  if (humanTimeFormat[1] === 0 && days !== '') {
     hours = '00H';
   }
 
-  if (convertTime(ms, 'hh') !== '00') {
-    hours = `${convertTime(ms, 'hh')}H`;
+  if (humanTimeFormat[1] !== 0) {
+    hours = `${humanTimeFormat[1] < 10 ? '0' : ''}${humanTimeFormat[1]}H`;
   }
+
+  minutes = `${humanTimeFormat[2] < 10 ? '0' : ''}${humanTimeFormat[2]}M`;
 
   return `${days} ${hours} ${minutes}`;
 };
 
+const isDatesEqual = (dateA, dateB) => dayjs(dateA).isSame(dateB, 'm');
+const isPricesEqual = (priceA, priceB) => priceA === priceB;
 
 const getWeightForNullDate = (dateA, dateB) => {
   if (dateA === null && dateB === null) {
@@ -87,9 +89,9 @@ const sortByDayDown = (taskA, taskB) => {
   return weight ?? dayjs(taskB.dateFrom).diff(dayjs(taskA.dateFrom));
 };
 
-const sortByPrice = (a, b) => a.price - b.price;
+const sortByPrice = (a, b) => b.price - a.price;
 
 
-const sortByTime = (firstPoint, secondPoint) => (dayjs(firstPoint.dateTo).unix() - dayjs(secondPoint.dateTo).unix()) - (dayjs(firstPoint.dateFrom).unix() - dayjs(secondPoint.dateFrom).unix());
+const sortByTime = (firstPoint, secondPoint) => (dayjs(secondPoint.dateTo) - dayjs(firstPoint.dateTo)) - (dayjs(secondPoint.dateFrom) - dayjs(firstPoint.dateFrom));
 
-export { howManyCities, updateItem, sortByDay, sortByDayDown, sortByPrice, sortByTime, getDiffTime, getDuration };
+export { howManyCities, sortByDay, sortByDayDown, sortByPrice, sortByTime, getDiffTime, getDuration, isDatesEqual, isPricesEqual };

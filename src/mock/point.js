@@ -1184,7 +1184,7 @@ const generatePhotos = () => {
 };
 
 
-const generateDateFrom = () => dayjs().add(getRandomInteger(0, 20), 'day').add(getRandomInteger(0, 5), 'hour').add(getRandomInteger(0, 10), 'minute').toDate();
+const generateDateFrom = () => dayjs().add(getRandomInteger(-10, 20), 'day').add(getRandomInteger(0, 5), 'hour').add(getRandomInteger(0, 10), 'minute').toDate();
 const generateDateTo = () => dayjs().add(getRandomInteger(21, 30), 'day').add(getRandomInteger(6, 10), 'hour').add(getRandomInteger(0, 10), 'minute').toDate();
 
 export const generatePoint = () => ({
