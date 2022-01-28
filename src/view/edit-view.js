@@ -21,7 +21,7 @@ const editPoint = (obj, isNew) => {
   );
 
   const getOffers = () => {
-    if (offer && offer.offers.length > 0) {
+    if (offer.offers.length > 0) {
       return `<section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
@@ -285,9 +285,9 @@ export default class EditFormView extends SmartView {
     }
   }
 
-  reset = (task) => {
+  reset = (point) => {
     this.updateData(
-      EditFormView.parsePointToData(task),
+      EditFormView.parsePointToData(point),
     );
   }
 
