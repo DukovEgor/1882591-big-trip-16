@@ -84,7 +84,7 @@ const editPoint = (obj, isNew) => {
           </div>
 
           <div class="event__type-item">
-            <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
+            <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train" checked>
             <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
           </div>
 

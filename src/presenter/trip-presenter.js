@@ -35,9 +35,6 @@ export default class TripPresenter {
     this.#filterModel = filterModel;
 
     this.#pointNewPresenter = new PointNewPresenter(this.#listComponent, this.#handleViewAction);
-
-    this.#pointsModel.addObserver(this.#handleModelEvent);
-    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
   get points() {
@@ -58,14 +55,25 @@ export default class TripPresenter {
   }
 
   init = () => {
-    this.#setFilterHandler();
+    this.#renderList();
+
+    this.#pointsModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
+
     this.#renderBoard();
   }
 
-  createPoint = () => {
-    this.#currentSortType = SortType.DAY;
-    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this.#pointNewPresenter.init();
+  destroy = () => {
+    this.#clearBoard({resetSortType: true});
+
+    remove(this.#listComponent);
+
+    this.#pointsModel.removeObserver(this.#handleModelEvent);
+    this.#filterModel.removeObserver(this.#handleModelEvent);
+  }
+
+  createPoint = (callback) => {
+    this.#pointNewPresenter.init(callback, this.#emptyMessageComponent, this.#renderEmptyMessage);
   }
 
   #handleModeChange = () => {
@@ -73,18 +81,9 @@ export default class TripPresenter {
     this.#pointPresenter.forEach((presenter) => presenter.resetView());
   }
 
-  #renderTotalRoute = () => {
+  renderTotalRoute = () => {
     this.#routeComponent = new RouteView(this.points.sort(sortByDay));
     render(tripMain, this.#routeComponent, RenderPosition.AFTERBEGIN);
-  }
-
-  #setFilterHandler = () => {
-    document.querySelector('.trip-filters').addEventListener('change', () => {
-      if (!this.points.length > 0) {
-        mainContent.innerHTML = '';
-        this.#renderEmptyMessage();
-      }
-    });
   }
 
   #renderSort = () => {
@@ -134,15 +133,13 @@ export default class TripPresenter {
   }
 
   #renderBoard = () => {
-    if (this.points.length === 0) {
+    if (!this.points.length > 0) {
       this.#renderEmptyMessage();
-      this.#renderList();
       return;
     }
-    this.#renderTotalRoute();
+    this.renderTotalRoute();
     this.#renderSort();
     this.#renderPoints(this.points);
-    this.#renderList();
   }
 
   #handleViewAction = (actionType, updateType, update) => {
