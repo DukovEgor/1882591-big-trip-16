@@ -88,7 +88,7 @@ const sortByDayDown = (taskA, taskB) => {
   return weight ?? dayjs(taskB.dateFrom).diff(dayjs(taskA.dateFrom));
 };
 
-const sortByPrice = (a, b) => a.price - b.price;
+const sortByPrice = (a, b) => b.price - a.price;
 
 const sortByTime = (firstPoint, secondPoint) => (dayjs(secondPoint.dateTo) - dayjs(firstPoint.dateTo)) - (dayjs(secondPoint.dateFrom) - dayjs(firstPoint.dateFrom));
 

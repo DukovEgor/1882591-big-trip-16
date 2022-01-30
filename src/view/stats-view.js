@@ -297,9 +297,9 @@ export default class StatsView extends SmartView {
 
     const statsData = getStatsData(this._data);
 
-    const sortedByPrice = statsData.sort(sortByPrice);
-    const sortedByType = statsData.sort(sortByTypeCount);
-    const sortedByDuration = statsData.sort(sortByDuration);
+    const sortedByPrice = statsData.slice().sort(sortByPrice);
+    const sortedByType = statsData.slice().sort(sortByTypeCount);
+    const sortedByDuration = statsData.slice().sort(sortByDuration);
 
     this.#moneyChart = renderMoneyChart(moneyCtx, sortedByPrice);
     this.#typeChart = renderTypeChart(typeCtx, sortedByType);
