@@ -64,7 +64,7 @@ export default class TripPresenter {
   }
 
   destroy = () => {
-    this.#clearBoard({resetSortType: true});
+    this.#clearBoard({ resetSortType: true });
 
     remove(this.#listComponent);
 
@@ -107,15 +107,17 @@ export default class TripPresenter {
   }
 
   #renderEmptyMessage = () => {
-    this.#emptyMessageComponent = new EmptyMessageView(this.#filterType);
-    render(mainContent, this.#emptyMessageComponent, RenderPosition.BEFOREEND);
+    if (this.points.length === 0) {
+      this.#emptyMessageComponent = new EmptyMessageView(this.#filterType);
+      render(mainContent, this.#emptyMessageComponent, RenderPosition.BEFOREEND);
+    }
   }
 
   #renderList = () => {
     render(mainContent, this.#listComponent, RenderPosition.BEFOREEND);
   }
 
-  #clearBoard = ({resetSortType = false} = {}) => {
+  #clearBoard = ({ resetSortType = false } = {}) => {
 
     this.#pointPresenter.forEach((presenter) => presenter.destroy());
     this.#pointPresenter.clear();
@@ -133,7 +135,7 @@ export default class TripPresenter {
   }
 
   #renderBoard = () => {
-    if (!this.points.length > 0) {
+    if (this.points.length === 0) {
       this.#renderEmptyMessage();
       return;
     }
@@ -166,7 +168,7 @@ export default class TripPresenter {
         this.#renderBoard();
         break;
       case UpdateType.MAJOR:
-        this.#clearBoard({resetSortType: true});
+        this.#clearBoard({ resetSortType: true });
         this.#renderBoard();
         break;
     }

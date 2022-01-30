@@ -17,7 +17,6 @@ export const formatPointTimes = (dueTime) => dueTime ? dayjs(dueTime).format('HH
 const getDiffTime = (dateFrom, dateTo) => {
   const from = dayjs(dateFrom);
   const to = dayjs(dateTo);
-
   return to.diff(from);
 };
 
@@ -89,9 +88,12 @@ const sortByDayDown = (taskA, taskB) => {
   return weight ?? dayjs(taskB.dateFrom).diff(dayjs(taskA.dateFrom));
 };
 
-const sortByPrice = (a, b) => b.price - a.price;
-
+const sortByPrice = (a, b) => a.price - b.price;
 
 const sortByTime = (firstPoint, secondPoint) => (dayjs(secondPoint.dateTo) - dayjs(firstPoint.dateTo)) - (dayjs(secondPoint.dateFrom) - dayjs(firstPoint.dateFrom));
 
-export { howManyCities, sortByDay, sortByDayDown, sortByPrice, sortByTime, getDiffTime, getDuration, isDatesEqual, isPricesEqual };
+const sortByTypeCount = (a, b) => b.count - a.count;
+
+const sortByDuration = (a, b) => b.duration - a.duration;
+
+export { howManyCities, sortByDay, sortByDayDown, sortByPrice, sortByTime, sortByTypeCount, sortByDuration, getDiffTime, getDuration, isDatesEqual, isPricesEqual, humanizeTime };

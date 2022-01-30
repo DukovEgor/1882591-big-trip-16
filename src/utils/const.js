@@ -21,3 +21,5 @@ export const MenuItem = {
   POINTS: 'POINTS',
   STATS: 'STATS',
 };
+
+export const TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
