@@ -17,18 +17,24 @@ export default class PointNewPresenter {
   #pointListContainer = null;
   #changeData = null;
   #pointEditComponent = null;
+  #destroyCallback = null;
   _newPointButton = document.querySelector('.trip-main__event-add-btn');
+
 
   constructor(pointListContainer, changeData) {
     this.#pointListContainer = pointListContainer;
     this.#changeData = changeData;
   }
 
-  init = () => {
+  init = (callback, _emptyMessageComponent, renderEmtyMessage) => {
+    this.#destroyCallback = callback;
+    this._emptyMessageComponent = _emptyMessageComponent;
+    this._renderEmtyMessage = renderEmtyMessage;
     if (this.#pointEditComponent !== null) {
       return;
     }
-
+    remove(this._emptyMessageComponent);
+    this._emptyMessageComponent = null;
     this.#pointEditComponent = new EditFormView(BLANK_POINT, true);
     this.#pointEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#pointEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
@@ -42,18 +48,20 @@ export default class PointNewPresenter {
     if (this.#pointEditComponent === null) {
       return;
     }
+    this.#destroyCallback?.();
 
     remove(this.#pointEditComponent);
     this.#pointEditComponent = null;
-
     document.removeEventListener('keydown', this.#escKeyDownHandler);
+    this._newPointButton.disabled = false;
+    this._renderEmtyMessage();
   }
 
   #handleFormSubmit = (point) => {
     this.#changeData(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
-      {id: nanoid(), ...point},
+      { id: nanoid(), ...point },
     );
     this.destroy();
     this._newPointButton.disabled = false;
@@ -68,6 +76,7 @@ export default class PointNewPresenter {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this.destroy();
+      this._newPointButton.disabled = false;
     }
   }
 }
