@@ -1,17 +1,18 @@
-import { allCities, allOffers } from '../mock/point.js';
 import SmartView from './smart-view.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import he from 'he';
 
-const editPoint = (obj, isNew) => {
-  const { type, reachPoint, price, dateFrom, dateTo, photos, options } = obj;
-  const offer = allOffers.find((index) => index.type === type);
-  const city = allCities.find((index) => index.name === reachPoint);
+const editPoint = (obj, isNew, destinations, offers) => {
+  const { type, reachPoint, price, dateFrom, dateTo, options } = obj;
+
+  const offersForType = offers.find((index) => index.type === type);
+  const destinationForCity = destinations.find((index) => index.name === reachPoint);
+  const {pictures, description} = destinationForCity;
 
   const getOffer = (opt) => (
     `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${opt.id}" type="checkbox" name="event-offer-luggage">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${opt.id}" type="checkbox" name="event-offer-luggage" ${options.find((el) => el.id === opt.id)?.id === opt.id ? 'checked' : ''}>
     <label class="event__offer-label" for="event-offer-luggage-${opt.id}">
       <span class="event__offer-title">${opt.title}</span>
       &plus;&euro;&nbsp;
@@ -21,12 +22,12 @@ const editPoint = (obj, isNew) => {
   );
 
   const getOffers = () => {
-    if (options.length > 0) {
+    if (offersForType.offers.length > 0 && offersForType.offers !== null) {
       return `<section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
       <div class="event__available-offers">
-      ${offer.offers.map((option) => getOffer(option)).join('')}
+      ${offersForType.offers.map((offer) => getOffer(offer)).join('')}
       </div>
     </section>`;
     }
@@ -36,30 +37,23 @@ const editPoint = (obj, isNew) => {
   const getPhoto = (pic) => (`<img class="event__photo" src="${pic.src}" alt="${pic.description}"></img>`);
 
   const getPhotos = () => {
-    if (isNew) {
+    if (pictures !== null && pictures.length > 0) {
       return `<div class="event__photos-container">
       <div class="event__photos-tape">
-      ${photos.map((pic) => getPhoto(pic)).join('')}
-      </div>
-    </div>`;
-    }
-    if (photos !== null && photos.length > 0) {
-      return `<div class="event__photos-container">
-      <div class="event__photos-tape">
-      ${photos.map((pic) => getPhoto(pic)).join('')}
+      ${pictures.map((pic) => getPhoto(pic)).join('')}
       </div>
     </div>`;
     }
     return '';
   };
 
-  const getCities = () => allCities.map((index) => `<option value="${index.name}"></option>`).join('');
+  const getCities = () => destinations.map((index) => `<option value="${index.name}"></option>`).join('');
 
   const getDestinationSection = () => {
-    if (city ? city.pictures || city.description : false) {
+    if (pictures !== null && pictures || description !== null && description) {
       return `<section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${city ? city.description : ''}</p>
+      <p class="event__destination-description">${description ? description : ''}</p>
       ${getPhotos()}
     </section>`;
     }
@@ -172,10 +166,12 @@ export default class EditFormView extends SmartView {
   #datepickerFrom = null;
   #datepickerTo = null;
 
-  constructor(point, isNew = false) {
+  constructor(point, isNew = false, destinations, offers) {
     super();
     this._data = EditFormView.parsePointToData(point);
     this._isNew = isNew;
+    this._destinations = destinations;
+    this._offers = offers;
 
     this.#setInnerHandlers();
     this.#setDatepicker();
@@ -214,7 +210,9 @@ export default class EditFormView extends SmartView {
     this.element.querySelector('.event__input--price').addEventListener('change', this.#priceEnterHandler);
     this.element.querySelector('.event__type-group').addEventListener('click', this.#typeChooserHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#cityChooserHandler);
+    //this.element.querySelector('.event__details').addEventListener('click', this.#offerPickHandler);
   }
+
 
   #priceEnterHandler = (evt) => {
     this._data.price = evt.target.value;
@@ -319,6 +317,6 @@ export default class EditFormView extends SmartView {
   }
 
   get template() {
-    return editPoint(this._data, this._isNew);
+    return editPoint(this._data, this._isNew, this._destinations, this._offers);
   }
 }

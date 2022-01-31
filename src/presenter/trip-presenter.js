@@ -57,6 +57,14 @@ export default class TripPresenter {
     return filteredPoints;
   }
 
+  get destinations() {
+    return this.#pointsModel.destinations;
+  }
+
+  get offers() {
+    return this.#pointsModel.offers;
+  }
+
   init = () => {
     this.#renderList();
 
@@ -76,7 +84,7 @@ export default class TripPresenter {
   }
 
   createPoint = (callback) => {
-    this.#pointNewPresenter.init(callback, this.#emptyMessageComponent, this.#renderEmptyMessage);
+    this.#pointNewPresenter.init(callback, this.#emptyMessageComponent, this.#renderEmptyMessage, this.destinations, this.offers);
   }
 
   #handleModeChange = () => {
@@ -101,7 +109,7 @@ export default class TripPresenter {
 
   #renderPoint = (point) => {
     const pointPresenter = new PointPresenter(this.#listComponent, this.#handleViewAction, this.#handleModeChange);
-    pointPresenter.init(point);
+    pointPresenter.init(point, this.destinations, this.offers);
     this.#pointPresenter.set(point.id, pointPresenter);
   }
 
