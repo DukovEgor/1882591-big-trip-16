@@ -9,6 +9,7 @@ import { sortByDay, sortByPrice, sortByTime } from '../utils/utils.js';
 import { FilterType, UpdateType, UserAction } from '../utils/const.js';
 import { filter } from '../utils/filter.js';
 import PointNewPresenter from './point-new-presenter.js';
+import LoadingView from '../view/loading-view.js';
 
 const mainContent = document.querySelector('.trip-events');
 const tripMain = document.querySelector('.trip-main');
@@ -23,12 +24,14 @@ export default class TripPresenter {
 
   #listComponent = new ContentListView;
   #newPointComponent = new NewPointView;
+  #loadingComponent = new LoadingView();
 
   #pointPresenter = new Map();
   #pointNewPresenter = null;
 
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
+  #isLoading = true;
 
   constructor(pointsModel, filterModel) {
     this.#pointsModel = pointsModel;
@@ -106,6 +109,10 @@ export default class TripPresenter {
     points.forEach((point) => this.#renderPoint(point));
   }
 
+  #renderLoading = () => {
+    render(mainContent, this.#loadingComponent, RenderPosition.AFTERBEGIN);
+  }
+
   #renderEmptyMessage = () => {
     if (this.points.length === 0) {
       this.#emptyMessageComponent = new EmptyMessageView(this.#filterType);
@@ -122,6 +129,7 @@ export default class TripPresenter {
     this.#pointPresenter.forEach((presenter) => presenter.destroy());
     this.#pointPresenter.clear();
 
+    remove(this.#loadingComponent);
     remove(this.#sortComponent);
     remove(this.#routeComponent);
 
@@ -135,6 +143,10 @@ export default class TripPresenter {
   }
 
   #renderBoard = () => {
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
     if (this.points.length === 0) {
       this.#renderEmptyMessage();
       return;
@@ -169,6 +181,11 @@ export default class TripPresenter {
         break;
       case UpdateType.MAJOR:
         this.#clearBoard({ resetSortType: true });
+        this.#renderBoard();
+        break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
         this.#renderBoard();
         break;
     }

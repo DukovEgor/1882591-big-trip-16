@@ -27,16 +27,16 @@ const createPoint = (obj) => {
        €&nbsp;<span class="event__price-value">${price}</span>
      </p>
      <h4 class="visually-hidden">Offers:</h4>
-     ${options ? `<ul class="event__selected-offers">
+     ${options !== null ? `<ul class="event__selected-offers">
      <li class="event__offer">
-       <span class="event__offer-title">${options.offers[0].title}</span>
+       <span class="event__offer-title"></span>
        +€&nbsp;
-       <span class="event__offer-price">${options.offers[0].price}</span>
+       <span class="event__offer-price"></span>
      </li>
      <li class="event__offer">
-       <span class="event__offer-title">${options.offers[1].title}</span>
+       <span class="event__offer-title"></span>
        +€&nbsp;
-       <span class="event__offer-price">${options.offers[1].price}</span>
+       <span class="event__offer-price"></span>
      </li>
    </ul>` : ''}
      <button class="event__favorite-btn  ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">

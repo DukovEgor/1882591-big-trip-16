@@ -5,7 +5,7 @@ import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import he from 'he';
 
 const editPoint = (obj, isNew) => {
-  const { type, reachPoint, price, dateFrom, dateTo } = obj;
+  const { type, reachPoint, price, dateFrom, dateTo, photos, options } = obj;
   const offer = allOffers.find((index) => index.type === type);
   const city = allCities.find((index) => index.name === reachPoint);
 
@@ -21,7 +21,7 @@ const editPoint = (obj, isNew) => {
   );
 
   const getOffers = () => {
-    if (offer.offers.length > 0) {
+    if (options.length > 0) {
       return `<section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
@@ -36,10 +36,17 @@ const editPoint = (obj, isNew) => {
   const getPhoto = (pic) => (`<img class="event__photo" src="${pic.src}" alt="${pic.description}"></img>`);
 
   const getPhotos = () => {
-    if (city && city.pictures.length > 0) {
+    if (isNew) {
       return `<div class="event__photos-container">
       <div class="event__photos-tape">
-      ${city.pictures.map((pic) => getPhoto(pic)).join('')}
+      ${photos.map((pic) => getPhoto(pic)).join('')}
+      </div>
+    </div>`;
+    }
+    if (photos !== null && photos.length > 0) {
+      return `<div class="event__photos-container">
+      <div class="event__photos-tape">
+      ${photos.map((pic) => getPhoto(pic)).join('')}
       </div>
     </div>`;
     }
