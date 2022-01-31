@@ -30,7 +30,6 @@ export default class PointPresenter {
     this.#point = point;
     const prevPointComponent = this.#pointComponent;
     const prevPointEditComponent = this.#pointEditComponent;
-
     this.#pointComponent = new PointView(point);
     this.#pointEditComponent = new EditFormView(point, false, destinations, offers);
 

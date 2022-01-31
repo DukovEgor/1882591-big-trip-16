@@ -24,3 +24,14 @@ export const MenuItem = {
 };
 
 export const TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
+export const TYPES_LABELS = {
+  'taxi': 'Taxi',
+  'bus': 'Bus',
+  'train': 'Train',
+  'ship': 'Ship',
+  'drive': 'Drive',
+  'flight': 'Flight',
+  'check-in': 'Check-in',
+  'sightseeing': 'Sightseeing',
+  'restaurant': 'Restaurant',
+};

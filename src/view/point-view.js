@@ -31,7 +31,7 @@ const createPoint = (obj) => {
        €&nbsp;<span class="event__price-value">${price}</span>
      </p>
      <h4 class="visually-hidden">Offers:</h4>
-     ${options !== null && options.length > 0 ? `<ul class="event__selected-offers">
+     ${options && options !== null && options.length > 0 ? `<ul class="event__selected-offers">
      ${options.map((index) => getOffer(index)).join('')}
    </ul>` : ''}
      <button class="event__favorite-btn  ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">

@@ -3,7 +3,6 @@ import EmptyMessageView from '../view/empty-view.js';
 import ContentListView from '../view/list-view.js';
 import RouteView from '../view/route-view';
 import SiteSortView, { SortType } from '../view/sort-view.js';
-import NewPointView from '../view/form-view.js';
 import PointPresenter from './point-pesenter.js';
 import { sortByDay, sortByPrice, sortByTime } from '../utils/utils.js';
 import { FilterType, UpdateType, UserAction } from '../utils/const.js';
@@ -23,7 +22,6 @@ export default class TripPresenter {
   #emptyMessageComponent = null;
 
   #listComponent = new ContentListView;
-  #newPointComponent = new NewPointView;
   #loadingComponent = new LoadingView();
 
   #pointPresenter = new Map();
@@ -103,10 +101,6 @@ export default class TripPresenter {
     render(mainContent, this.#sortComponent, RenderPosition.AFTERBEGIN);
   }
 
-  #renderNewPointForm = () => {
-    render(this.#listComponent, this.#newPointComponent, RenderPosition.AFTERBEGIN);
-  }
-
   #renderPoint = (point) => {
     const pointPresenter = new PointPresenter(this.#listComponent, this.#handleViewAction, this.#handleModeChange);
     pointPresenter.init(point, this.destinations, this.offers);
@@ -181,7 +175,7 @@ export default class TripPresenter {
   #handleModelEvent = (updateType, data) => {
     switch (updateType) {
       case UpdateType.PATCH:
-        this.#pointPresenter.get(data.id).init(data);
+        this.#pointPresenter.get(data.id).init(data, this.destinations, this.offers);
         break;
       case UpdateType.MINOR:
         this.#clearBoard();
