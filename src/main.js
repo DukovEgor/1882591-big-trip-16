@@ -42,12 +42,12 @@ const handleSiteMenuClick = (menuItem) => {
       siteMenuComponent.setMenuItem(MenuItem.POINTS);
       break;
     case MenuItem.POINTS:
+      remove(statsComponent);
       siteMenuComponent.setMenuItem(MenuItem.POINTS);
       filterPresenter.init();
       tripPresenter.destroy();
       tripPresenter.init();
       addNewButton.disabled = false;
-      remove(statsComponent);
       break;
     case MenuItem.STATS:
       siteMenuComponent.setMenuItem(MenuItem.STATS);
