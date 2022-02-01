@@ -1,6 +1,6 @@
 import { UpdateType, UserAction } from '../utils/const';
 import { remove, render, RenderPosition, replace } from '../utils/render';
-import { isDatesEqual, isPricesEqual } from '../utils/utils';
+import { isDatesEqual, isOffersEqual, isPricesEqual } from '../utils/utils';
 import EditFormView from '../view/edit-view';
 import PointView from '../view/point-view';
 
@@ -152,8 +152,8 @@ export default class PointPresenter {
     const isMinorUpdate =
       !isDatesEqual(this.#point.dateFrom, update.dateFrom) ||
       !isDatesEqual(this.#point.dateTo, update.dateTo) ||
-      !isPricesEqual(this.#point.price, update.price);
-
+      !isPricesEqual(this.#point.price, update.price) ||
+      !isOffersEqual(this.#point.options, update.options);
     this.#changeData(
       UserAction.UPDATE_POINT,
       isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,

@@ -59,6 +59,7 @@ const getDuration = (dateFrom, dateTo) => {
 
 const isDatesEqual = (dateA, dateB) => dayjs(dateA).isSame(dateB, 'm');
 const isPricesEqual = (priceA, priceB) => priceA === priceB;
+const isOffersEqual = (offersA, offersB) => offersA === offersB;
 
 const getWeightForNullDate = (dateA, dateB) => {
   if (dateA === null && dateB === null) {
@@ -92,4 +93,4 @@ const sortByDuration = (a, b) => b.duration - a.duration;
 
 const offerToObject = (offer) => ({'id': Number(offer.id), 'title': offer.value, 'price': Number(offer.dataset.price)});
 
-export { howManyCities, sortByDay, sortByPrice, sortByTime, sortByTypeCount, sortByDuration, getDiffTime, getDuration, isDatesEqual, isPricesEqual, humanizeTime, offerToObject };
+export { howManyCities, sortByDay, sortByPrice, sortByTime, sortByTypeCount, sortByDuration, getDiffTime, getDuration, isDatesEqual, isPricesEqual, isOffersEqual, humanizeTime, offerToObject };

@@ -6,7 +6,7 @@ import AbstractView from './absract-view.js';
 const calcTotal = (arr) => {
   const initialValue = 0;
   return arr.reduce(
-    (accumulator, currentValue) => accumulator + currentValue.price,
+    (accumulator, currentValue) => accumulator + currentValue.price + currentValue?.options?.reduce((acc, curVal) => acc + curVal?.price, initialValue),
     initialValue
   );
 };
