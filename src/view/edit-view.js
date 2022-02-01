@@ -1,18 +1,20 @@
-import { allCities, allOffers } from '../mock/point.js';
 import SmartView from './smart-view.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import he from 'he';
+import { offerToObject } from '../utils/utils.js';
+import { TYPES, TYPES_LABELS } from '../utils/const.js';
 
-const editPoint = (obj, isNew) => {
-  const { type, reachPoint, price, dateFrom, dateTo } = obj;
-  const offer = allOffers.find((index) => index.type === type);
-  const city = allCities.find((index) => index.name === reachPoint);
+const editPoint = (obj, isNew, destinations, offers) => {
+  const { type, reachPoint, price, dateFrom, dateTo, options } = obj;
+  const offersForType = offers.find((index) => index.type === type);
+  const destinationForCity = destinations.find((index) => index.name === reachPoint);
+  const { pictures, description } = destinationForCity;
 
   const getOffer = (opt) => (
     `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${opt.id}" type="checkbox" name="event-offer-luggage">
-    <label class="event__offer-label" for="event-offer-luggage-${opt.id}">
+    <input class="event__offer-checkbox  visually-hidden" id="${opt.id}" type="checkbox" value="${opt.title}" data-price="${opt.price}" name="event-offer-luggage" ${options && options.length > 0 ? `${options.find((el) => el.id === opt.id)?.id === opt.id ? 'checked' : ''}` : ''}>
+    <label class="event__offer-label" for="${opt.id}">
       <span class="event__offer-title">${opt.title}</span>
       &plus;&euro;&nbsp;
       <span class="event__offer-price">${opt.price}</span>
@@ -21,12 +23,12 @@ const editPoint = (obj, isNew) => {
   );
 
   const getOffers = () => {
-    if (offer.offers.length > 0) {
+    if (offersForType.offers.length > 0 && offersForType.offers !== null) {
       return `<section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
       <div class="event__available-offers">
-      ${offer.offers.map((option) => getOffer(option)).join('')}
+      ${offersForType.offers.map((offer) => getOffer(offer)).join('')}
       </div>
     </section>`;
     }
@@ -36,23 +38,23 @@ const editPoint = (obj, isNew) => {
   const getPhoto = (pic) => (`<img class="event__photo" src="${pic.src}" alt="${pic.description}"></img>`);
 
   const getPhotos = () => {
-    if (city && city.pictures.length > 0) {
+    if (pictures !== null && pictures.length > 0) {
       return `<div class="event__photos-container">
       <div class="event__photos-tape">
-      ${city.pictures.map((pic) => getPhoto(pic)).join('')}
+      ${pictures.map((pic) => getPhoto(pic)).join('')}
       </div>
     </div>`;
     }
     return '';
   };
 
-  const getCities = () => allCities.map((index) => `<option value="${index.name}"></option>`).join('');
+  const getCities = () => destinations.map((index) => `<option value="${index.name}"></option>`).join('');
 
   const getDestinationSection = () => {
-    if (city ? city.pictures || city.description : false) {
+    if (pictures !== null && pictures || description !== null && description || isNew) {
       return `<section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${city ? city.description : ''}</p>
+      <p class="event__destination-description">${description ? description : ''}</p>
       ${getPhotos()}
     </section>`;
     }
@@ -72,51 +74,10 @@ const editPoint = (obj, isNew) => {
       <div class="event__type-list">
         <fieldset class="event__type-group">
           <legend class="visually-hidden">Event type</legend>
-
-          <div class="event__type-item">
-            <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-            <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-            <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train" checked>
-            <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-            <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-            <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight">
-            <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-            <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-            <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-            <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
-          </div>
+          ${TYPES.map((typeName) => `<div class="event__type-item">
+          <input id="event-type-${typeName}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${typeName}" ${typeName === type ? 'checked' : ''}>
+          <label class="event__type-label  event__type-label--${typeName}" for="event-type-${typeName}-1">${TYPES_LABELS[String(typeName)]}</label>
+        </div>`).join('')}
         </fieldset>
       </div>
     </div>
@@ -144,7 +105,7 @@ const editPoint = (obj, isNew) => {
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="number" min="0" name="event-price" value="${he.encode(String(price))}">
+      <input class="event__input  event__input--price" id="event-price-1" type="number" min="1" name="event-price" value="${he.encode(String(price))}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -165,10 +126,12 @@ export default class EditFormView extends SmartView {
   #datepickerFrom = null;
   #datepickerTo = null;
 
-  constructor(point, isNew = false) {
+  constructor(point, isNew = false, destinations, offers) {
     super();
     this._data = EditFormView.parsePointToData(point);
     this._isNew = isNew;
+    this._destinations = destinations;
+    this._offers = offers;
 
     this.#setInnerHandlers();
     this.#setDatepicker();
@@ -207,6 +170,24 @@ export default class EditFormView extends SmartView {
     this.element.querySelector('.event__input--price').addEventListener('change', this.#priceEnterHandler);
     this.element.querySelector('.event__type-group').addEventListener('click', this.#typeChooserHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#cityChooserHandler);
+    if (this.element.querySelector('.event__available-offers')) {
+      this.element.querySelector('.event__available-offers').addEventListener('click', this.#offerPickHandler);
+    }
+  }
+
+  #offerPickHandler = (evt) => {
+    if (evt.target.tagName !== 'INPUT') {
+      return;
+    }
+    const checkedOffers = this.element.querySelector('.event__available-offers').querySelectorAll('input:checked');
+    const pointOffers = [];
+    for (const offer of checkedOffers) {
+      pointOffers.push(offerToObject(offer));
+    }
+    this._data.options = [...pointOffers];
+    this.updateData({
+      options: this._data.options,
+    });
   }
 
   #priceEnterHandler = (evt) => {
@@ -312,6 +293,6 @@ export default class EditFormView extends SmartView {
   }
 
   get template() {
-    return editPoint(this._data, this._isNew);
+    return editPoint(this._data, this._isNew, this._destinations, this._offers);
   }
 }

@@ -96,4 +96,6 @@ const sortByTypeCount = (a, b) => b.count - a.count;
 
 const sortByDuration = (a, b) => b.duration - a.duration;
 
-export { howManyCities, sortByDay, sortByDayDown, sortByPrice, sortByTime, sortByTypeCount, sortByDuration, getDiffTime, getDuration, isDatesEqual, isPricesEqual, humanizeTime };
+const offerToObject = (offer) => ({'id': Number(offer.id), 'title': offer.value, 'price': Number(offer.dataset.price)});
+
+export { howManyCities, sortByDay, sortByDayDown, sortByPrice, sortByTime, sortByTypeCount, sortByDuration, getDiffTime, getDuration, isDatesEqual, isPricesEqual, humanizeTime, offerToObject };

@@ -8,7 +8,7 @@ const BLANK_POINT = {
   dateFrom: dayjs().toDate(),
   dateTo: dayjs().toDate(),
   type: 'train',
-  reachPoint: '',
+  reachPoint: 'Sochi',
   photos: [],
   price: 0,
 };
@@ -26,7 +26,7 @@ export default class PointNewPresenter {
     this.#changeData = changeData;
   }
 
-  init = (callback, _emptyMessageComponent, renderEmtyMessage) => {
+  init = (callback, _emptyMessageComponent, renderEmtyMessage, destinations, offers) => {
     this.#destroyCallback = callback;
     this._emptyMessageComponent = _emptyMessageComponent;
     this._renderEmtyMessage = renderEmtyMessage;
@@ -35,7 +35,7 @@ export default class PointNewPresenter {
     }
     remove(this._emptyMessageComponent);
     this._emptyMessageComponent = null;
-    this.#pointEditComponent = new EditFormView(BLANK_POINT, true);
+    this.#pointEditComponent = new EditFormView(BLANK_POINT, true, destinations, offers);
     this.#pointEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#pointEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
 

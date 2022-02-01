@@ -1,4 +1,4 @@
-import { generatePoint } from './mock/point.js';
+import ApiService from './api-service.js';
 import FilterModel from './model/filter-model.js';
 import PointsModel from './model/points-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
@@ -8,24 +8,19 @@ import { remove, render, RenderPosition } from './utils/render.js';
 import SiteMenuView from './view/menu-view.js';
 import StatsView from './view/stats-view.js';
 
+const AUTHORIZATION = 'Basic iddQd12345ed';
+const END_POINT = 'https://16.ecmascript.pages.academy/big-trip';
 
-const MOCK_COUNTER = 14;
-const points = Array.from({ length: MOCK_COUNTER }, generatePoint);
-
-const pointsModel = new PointsModel();
-pointsModel.points = points;
-
+const pointsModel = new PointsModel(new ApiService(END_POINT, AUTHORIZATION));
 const filterModel = new FilterModel();
 
 const pageHeader = document.querySelector('.page-header');
 const tripControlsNavigation = pageHeader.querySelector('.trip-controls__navigation');
 const tripControlsFilters = pageHeader.querySelector('.trip-controls__filters');
 const bodyContainer = document.querySelector('main>.page-body__container');
-
-const siteMenuComponent = new SiteMenuView();
-render(tripControlsNavigation, siteMenuComponent, RenderPosition.BEFOREEND);
 const addNewButton = document.querySelector('.trip-main__event-add-btn');
 
+const siteMenuComponent = new SiteMenuView();
 const tripPresenter = new TripPresenter(pointsModel, filterModel);
 const filterPresenter = new FilterPresenter(tripControlsFilters, filterModel, pointsModel);
 
@@ -66,9 +61,10 @@ const handleSiteMenuClick = (menuItem) => {
   }
 };
 
-siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
-
-
+pointsModel.init().finally(() => {
+  render(tripControlsNavigation, siteMenuComponent, RenderPosition.BEFOREEND);
+  siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+});
 filterPresenter.init();
 tripPresenter.init();
 

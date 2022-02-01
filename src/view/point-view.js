@@ -6,7 +6,11 @@ const createPoint = (obj) => {
   const { type, reachPoint, options, price, isFavorite, dateFrom, dateTo } = obj;
 
   const datePoint = formatPointDueDate(dateFrom);
-
+  const getOffer = (index) => `<li class="event__offer">
+  <span class="event__offer-title">${index.title}</span>
+  +€&nbsp;
+  <span class="event__offer-price">${index.price}</span>
+</li>`;
 
   return `<li class="trip-events__item">
    <div class="event">
@@ -27,17 +31,8 @@ const createPoint = (obj) => {
        €&nbsp;<span class="event__price-value">${price}</span>
      </p>
      <h4 class="visually-hidden">Offers:</h4>
-     ${options ? `<ul class="event__selected-offers">
-     <li class="event__offer">
-       <span class="event__offer-title">${options.offers[0].title}</span>
-       +€&nbsp;
-       <span class="event__offer-price">${options.offers[0].price}</span>
-     </li>
-     <li class="event__offer">
-       <span class="event__offer-title">${options.offers[1].title}</span>
-       +€&nbsp;
-       <span class="event__offer-price">${options.offers[1].price}</span>
-     </li>
+     ${options && options !== null && options.length > 0 ? `<ul class="event__selected-offers">
+     ${options.map((index) => getOffer(index)).join('')}
    </ul>` : ''}
      <button class="event__favorite-btn  ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
        <span class="visually-hidden">Add to favorite</span>
