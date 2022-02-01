@@ -76,16 +76,10 @@ const getWeightForNullDate = (dateA, dateB) => {
   return null;
 };
 
-const sortByDay = (taskA, taskB) => {
-  const weight = getWeightForNullDate(taskA.dateFrom, taskB.dateFrom);
+const sortByDay = (pointA, pointB) => {
+  const weight = getWeightForNullDate(pointA.dateFrom, pointB.dateFrom);
 
-  return weight ?? dayjs(taskA.dateFrom).diff(dayjs(taskB.dateFrom));
-};
-
-const sortByDayDown = (taskA, taskB) => {
-  const weight = getWeightForNullDate(taskA.dateFrom, taskB.dateFrom);
-
-  return weight ?? dayjs(taskB.dateFrom).diff(dayjs(taskA.dateFrom));
+  return weight ?? dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
 };
 
 const sortByPrice = (a, b) => b.price - a.price;
@@ -98,4 +92,4 @@ const sortByDuration = (a, b) => b.duration - a.duration;
 
 const offerToObject = (offer) => ({'id': Number(offer.id), 'title': offer.value, 'price': Number(offer.dataset.price)});
 
-export { howManyCities, sortByDay, sortByDayDown, sortByPrice, sortByTime, sortByTypeCount, sortByDuration, getDiffTime, getDuration, isDatesEqual, isPricesEqual, humanizeTime, offerToObject };
+export { howManyCities, sortByDay, sortByPrice, sortByTime, sortByTypeCount, sortByDuration, getDiffTime, getDuration, isDatesEqual, isPricesEqual, humanizeTime, offerToObject };

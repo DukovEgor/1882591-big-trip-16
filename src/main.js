@@ -24,7 +24,7 @@ const siteMenuComponent = new SiteMenuView();
 const tripPresenter = new TripPresenter(pointsModel, filterModel);
 const filterPresenter = new FilterPresenter(tripControlsFilters, filterModel, pointsModel);
 
-const handleTaskNewFormClose = () => {
+const handlePointNewFormClose = () => {
   siteMenuComponent.setMenuItem(MenuItem.POINTS);
 };
 
@@ -38,7 +38,7 @@ const handleSiteMenuClick = (menuItem) => {
       filterPresenter.init();
       tripPresenter.destroy();
       tripPresenter.init();
-      tripPresenter.createPoint(handleTaskNewFormClose);
+      tripPresenter.createPoint(handlePointNewFormClose);
       siteMenuComponent.setMenuItem(MenuItem.POINTS);
       break;
     case MenuItem.POINTS:
