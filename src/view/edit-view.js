@@ -9,7 +9,7 @@ const editPoint = (obj, isNew, destinations, offers) => {
   const { type, reachPoint, price, dateFrom, dateTo, options, isDisabled, isSaving, isDeleting } = obj;
   const offersForType = offers.find((index) => index.type === type);
   const destinationForCity = destinations.find((index) => index.name === reachPoint);
-  const { pictures, description } = destinationForCity;
+  //const { pictures, description } = destinationForCity;
 
   const getOffer = (opt) => (
     `<div class="event__offer-selector">
@@ -38,10 +38,10 @@ const editPoint = (obj, isNew, destinations, offers) => {
   const getPhoto = (pic) => (`<img class="event__photo" src="${pic.src}" alt="${pic.description}"></img>`);
 
   const getPhotos = () => {
-    if (pictures !== null && pictures.length > 0) {
+    if (destinationForCity && destinationForCity.pictures !== null && destinationForCity.pictures.length > 0) {
       return `<div class="event__photos-container">
       <div class="event__photos-tape">
-      ${pictures.map((pic) => getPhoto(pic)).join('')}
+      ${destinationForCity.pictures.map((pic) => getPhoto(pic)).join('')}
       </div>
     </div>`;
     }
@@ -51,10 +51,10 @@ const editPoint = (obj, isNew, destinations, offers) => {
   const getCities = () => destinations.map((index) => `<option value="${index.name}"></option>`).join('');
 
   const getDestinationSection = () => {
-    if (pictures !== null && pictures || description !== null && description || isNew) {
+    if ( destinationForCity && destinationForCity.pictures !== null && destinationForCity.pictures || destinationForCity && destinationForCity.description !== null && destinationForCity.description) {
       return `<section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${description ? description : ''}</p>
+      <p class="event__destination-description">${destinationForCity.description ? destinationForCity.description : ''}</p>
       ${getPhotos()}
     </section>`;
     }

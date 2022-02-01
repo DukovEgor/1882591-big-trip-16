@@ -7,7 +7,7 @@ const BLANK_POINT = {
   dateFrom: dayjs().toDate(),
   dateTo: dayjs().toDate(),
   type: 'train',
-  reachPoint: 'Sochi',
+  reachPoint: '',
   photos: [],
   price: 0,
   description: 'Common description',
