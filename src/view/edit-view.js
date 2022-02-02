@@ -110,9 +110,9 @@ const editPoint = (obj, isNew, destinations, offers) => {
 
     <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled || isSaving || isDeleting ? 'disabled' : ''}>${isSaving ? 'Saving' : 'Save'}</button>
     <button class="event__reset-btn" type="reset" ${isDisabled || isSaving || isDeleting ? 'disabled' : ''}>${isNew ? 'Cancel' : `${isDeleting ? 'Deleting' : 'Delete'}`}</button>
-<button class="event__rollup-btn" type="button">
-  <span class="visually-hidden">Open event</span>
-</button>
+${isNew ? '' : `<button class="event__rollup-btn" type="button">
+<span class="visually-hidden">Open event</span>
+</button>`}
   </header>
   <section class="event__details">
     ${getOffers()}
