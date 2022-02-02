@@ -1,6 +1,8 @@
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
 };
 
 export default class ApiService {
@@ -40,6 +42,28 @@ export default class ApiService {
     return parsedResponse;
   }
 
+  addPoint = async (point) => {
+    const response = await this.#load({
+      url: 'points',
+      method: Method.POST,
+      body: JSON.stringify(this.#adaptToServer(point)),
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+    });
+
+    const parsedResponse = await ApiService.parseResponse(response);
+
+    return parsedResponse;
+  }
+
+  deletePoint = async (point) => {
+    const response = await this.#load({
+      url: `points/${point.id}`,
+      method: Method.DELETE,
+    });
+
+    return response;
+  }
+
   #load = async ({
     url,
     method = Method.GET,
@@ -66,9 +90,13 @@ export default class ApiService {
       ...point,
       'date_from': point.dateFrom.toISOString(),
       'date_to': point.dateTo.toISOString(),
-      'is_favorite': point.isFavorite,
-      'destination': { 'name': point.reachPoint, 'description': point.description, 'pictures': point.photos },
-      'offers': point.options,
+      'is_favorite': point.isFavorite ? point.isFavorite : false,
+      'destination': {
+        'name': point.reachPoint ? point.reachPoint : 'Sochi',
+        'description': point.description ? point.description : '',
+        'pictures': point.photos ? point.photos : [],
+      },
+      'offers': point.options ? point.options : [],
       'base_price': point.price,
     };
 

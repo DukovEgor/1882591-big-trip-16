@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import { nanoid } from 'nanoid';
 import { UpdateType, UserAction } from '../utils/const';
 import { remove, render, RenderPosition } from '../utils/render';
 import EditFormView from '../view/edit-view';
@@ -8,9 +7,10 @@ const BLANK_POINT = {
   dateFrom: dayjs().toDate(),
   dateTo: dayjs().toDate(),
   type: 'train',
-  reachPoint: 'Sochi',
+  reachPoint: '',
   photos: [],
   price: 0,
+  description: 'Common description',
 };
 
 export default class PointNewPresenter {
@@ -57,13 +57,19 @@ export default class PointNewPresenter {
     this._renderEmtyMessage();
   }
 
+  setSaving = () => {
+    this.#pointEditComponent.updateData({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
   #handleFormSubmit = (point) => {
     this.#changeData(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
-      { id: nanoid(), ...point },
+      point,
     );
-    this.destroy();
     this._newPointButton.disabled = false;
   }
 
@@ -78,5 +84,17 @@ export default class PointNewPresenter {
       this.destroy();
       this._newPointButton.disabled = false;
     }
+  }
+
+  setAborting = () => {
+    const resetFormState = () => {
+      this.#pointEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#pointEditComponent.shake(resetFormState);
   }
 }
