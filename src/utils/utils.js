@@ -1,5 +1,11 @@
 import dayjs from 'dayjs';
 
+const MILIESECONDS_IN_SECOND = 1000;
+const SECONDS_IN_MINUTE = 60;
+const SECONDS_IN_HOUR = 3600;
+const HOURS_IN_DAY = 24;
+const CALCULUS_SYSTEM = 10;
+
 const howManyCities = (arr) => {
   if (arr.length === 1) {
     return `${arr[0].reachPoint}`;
@@ -21,19 +27,19 @@ const getDiffTime = (dateFrom, dateTo) => {
 };
 
 const humanizeTime = (n) => {
-  const day = parseInt(n / (24 * 3600), 10);
+  const day = parseInt(n / (HOURS_IN_DAY * SECONDS_IN_HOUR), CALCULUS_SYSTEM);
 
-  n = n % (24 * 3600);
-  const hour = parseInt(n / 3600, 10);
+  n = n % (HOURS_IN_DAY * SECONDS_IN_HOUR);
+  const hour = parseInt(n / SECONDS_IN_HOUR, CALCULUS_SYSTEM);
 
-  n %= 3600;
-  const minutes = n / 60;
+  n %= SECONDS_IN_HOUR;
+  const minutes = n / SECONDS_IN_MINUTE;
   return [day, hour, minutes.toFixed()];
 };
 
 const getDuration = (dateFrom, dateTo) => {
   const ms = getDiffTime(dateFrom, dateTo);
-  const humanTimeFormat = humanizeTime(ms / 1000);
+  const humanTimeFormat = humanizeTime(ms / MILIESECONDS_IN_SECOND);
 
   let days = '';
   let hours = '';

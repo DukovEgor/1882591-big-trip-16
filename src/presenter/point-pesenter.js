@@ -1,7 +1,7 @@
 import { UpdateType, UserAction } from '../utils/const';
 import { remove, render, RenderPosition, replace } from '../utils/render';
 import { isDatesEqual, isOffersEqual, isPricesEqual } from '../utils/utils';
-import EditFormView from '../view/edit-view';
+import EditFormView from '../view/edit-form-view';
 import PointView from '../view/point-view';
 
 const Mode = {

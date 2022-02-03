@@ -5,7 +5,7 @@ import FilterPresenter from './presenter/filter-presenter.js';
 import TripPresenter from './presenter/trip-presenter.js';
 import { MenuItem } from './utils/const.js';
 import { remove, render, RenderPosition } from './utils/render.js';
-import SiteMenuView from './view/menu-view.js';
+import SiteMenuView from './view/site-menu-view.js';
 import StatsView from './view/stats-view.js';
 
 const AUTHORIZATION = 'Basic iddQd12345ed';

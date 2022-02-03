@@ -1,6 +1,6 @@
 import { FilterType, UpdateType } from '../utils/const';
 import { remove, render, RenderPosition, replace } from '../utils/render';
-import SiteFilterView from '../view/filter-view';
+import SiteFilterView from '../view/site-filter-view';
 
 export default class FilterPresenter {
   #filterContainer = null;

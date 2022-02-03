@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { UpdateType, UserAction } from '../utils/const';
 import { remove, render, RenderPosition } from '../utils/render';
-import EditFormView from '../view/edit-view';
+import EditFormView from '../view/edit-form-view';
 
 const BLANK_POINT = {
   dateFrom: dayjs().toDate(),

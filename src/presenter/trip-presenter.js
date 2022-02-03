@@ -1,8 +1,8 @@
 import { remove, render, RenderPosition } from '../utils/render.js';
-import EmptyMessageView from '../view/empty-view.js';
-import ContentListView from '../view/list-view.js';
+import EmptyMessageView from '../view/empty-message-view.js';
+import ContentListView from '../view/content-list-view.js';
 import RouteView from '../view/route-view';
-import SiteSortView, { SortType } from '../view/sort-view.js';
+import SiteSortView, { SortType } from '../view/site-sort-view.js';
 import PointPresenter, { State } from './point-pesenter.js';
 import { sortByDay, sortByPrice, sortByTime } from '../utils/utils.js';
 import { FilterType, UpdateType, UserAction } from '../utils/const.js';
