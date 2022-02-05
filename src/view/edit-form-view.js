@@ -7,8 +7,11 @@ import { TYPES, TYPES_LABELS } from '../utils/const.js';
 
 const editPoint = (obj, isNew, destinations, offers) => {
   const { type, reachPoint, price, dateFrom, dateTo, options, isDisabled, isSaving, isDeleting } = obj;
+
   const offersForType = offers.find((index) => index.type === type);
+
   const destinationForCity = destinations.find((index) => index.name === reachPoint);
+
   const getOffer = (opt) => (
     `<div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden" id="${opt.id}" type="checkbox" value="${opt.title}" data-price="${opt.price}" name="event-offer-luggage" ${options && options.length > 0 ? `${options.find((el) => el.id === opt.id)?.id === opt.id ? 'checked' : ''}` : ''} ${isDisabled || isSaving || isDeleting ? 'disabled' : ''}>
