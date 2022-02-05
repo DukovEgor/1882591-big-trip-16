@@ -9,7 +9,6 @@ const editPoint = (obj, isNew, destinations, offers) => {
   const { type, reachPoint, price, dateFrom, dateTo, options, isDisabled, isSaving, isDeleting } = obj;
   const offersForType = offers.find((index) => index.type === type);
   const destinationForCity = destinations.find((index) => index.name === reachPoint);
-
   const getOffer = (opt) => (
     `<div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden" id="${opt.id}" type="checkbox" value="${opt.title}" data-price="${opt.price}" name="event-offer-luggage" ${options && options.length > 0 ? `${options.find((el) => el.id === opt.id)?.id === opt.id ? 'checked' : ''}` : ''} ${isDisabled || isSaving || isDeleting ? 'disabled' : ''}>
@@ -22,7 +21,7 @@ const editPoint = (obj, isNew, destinations, offers) => {
   );
 
   const getOffers = () => {
-    if (offersForType?.offers.length > 0) {
+    if (offersForType.offers?.length > 0) {
       return `<section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
@@ -37,7 +36,7 @@ const editPoint = (obj, isNew, destinations, offers) => {
   const getPhoto = (pic) => (`<img class="event__photo" src="${pic.src}" alt="${pic.description}"></img>`);
 
   const getPhotos = () => {
-    if (destinationForCity?.pictures.length > 0) {
+    if (destinationForCity.pictures?.length > 0) {
       return `<div class="event__photos-container">
       <div class="event__photos-tape">
       ${destinationForCity.pictures.map((pic) => getPhoto(pic)).join('')}
@@ -50,7 +49,7 @@ const editPoint = (obj, isNew, destinations, offers) => {
   const getCities = () => destinations.map((index) => `<option value="${index.name}"></option>`).join('');
 
   const getDestinationSection = () => {
-    if ( destinationForCity?.pictures || destinationForCity?.description) {
+    if (destinationForCity?.pictures || destinationForCity?.description) {
       return `<section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
       <p class="event__destination-description">${destinationForCity.description ? destinationForCity.description : ''}</p>
